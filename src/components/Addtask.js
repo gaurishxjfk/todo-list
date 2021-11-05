@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {TextField,Button} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import {List,ListItem,IconButton,Snackbar,Avatar,ListItemText,Grid,Paper,Typography} from '@mui/material'
+import {List,ListItem,IconButton,Snackbar,ListItemText,Grid,Paper,Typography} from '@mui/material'
 import { UserState } from '../context';
 import { userData } from '../config/data';
 
@@ -68,7 +68,7 @@ const Addtask = () => {
     }
     useEffect(() => {
         localStorage.setItem(`task-${userID}`,JSON.stringify(taskList));      
-    }, [task,taskList]);
+    }, [task,taskList,userID]);
 
     const styles = {
         paper : {
