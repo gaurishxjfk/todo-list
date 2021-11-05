@@ -59,7 +59,7 @@ const Login = () => {
 
     return (
         <Grid>
-            <Paper elevation={10} style={styles.paper}>
+            <Paper elevation={11} style={styles.paper}>
                 <Grid align='center'>
                     <Avatar><LockOutlined/></Avatar>
                     <Typography variant="h3">Login</Typography>
