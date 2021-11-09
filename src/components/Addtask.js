@@ -158,6 +158,8 @@ const Addtask = () => {
 
      const handleClickFilter = () => {
     setOpenFilter(!openFilter);
+    setIsDoneFilter(false)
+   
   };
 
   const userDtls = userData.filter(i => i.id === userID)
@@ -210,10 +212,13 @@ const Addtask = () => {
                         message="Task already added..."
                     />
 
-                    <Paper elevation={4} sx={{mt : 2 }}>
+                    <Paper elevation={4} sx={{mt : 2,display:'flex',flexDirection:'row' , justifyContent:'space-between'}}>
+                    <Grid item lg={12} p={1}>
                             <TextField id="outlined-basic" label="Search Task..." variant="outlined" type='search'                               
-                                       fullWidth  onChange={e => setSearchTask(e.target.value)} 
+                                 fullWidth        onChange={e => setSearchTask(e.target.value)} size="small"
                             />
+                            </Grid>
+                            <Grid >
                              <ListItemButton onClick={handleClickFilter}>
                             <ListItemText primary="Filter" />
                                     {openFilter ? <ExpandLess /> : <ExpandMore />}
@@ -221,11 +226,12 @@ const Addtask = () => {
                                 <Collapse in={openFilter} timeout="auto" unmountOnExit>
                                     <List component="div" disablePadding>
                                     <ListItemButton sx={{ pl: 4 }}>
-                                        <ListItemText primary="Starred" />
+                                        <ListItemText primary="Done Tasks" />
                                         <Checkbox defaultChecked={isDoneFilter} onChange={e => setIsDoneFilter(!isDoneFilter)} />
                                     </ListItemButton>
                                     </List>
                                 </Collapse>
+                                </Grid>
                     </Paper>
                     <TabContext value={tabValue}>
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
