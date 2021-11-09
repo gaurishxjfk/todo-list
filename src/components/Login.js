@@ -5,6 +5,22 @@ import { userData } from '../config/data';
 import {LockOutlined} from '@mui/icons-material';
 import {useHistory} from 'react-router-dom'
 
+
+export const styles = {
+    paper : {
+        padding : 20,
+        height : '70vh',
+        width : '50vh',
+        margin : '30px auto'
+    },
+    form : {
+        display : 'flex',
+        flexDirection : 'column',
+        justifyContent : 'spaceAround',
+        gap : 5
+    }
+}
+
 const Login = () => {
 
     const {  setIsLoggedIn, setUserId} = UserState();
@@ -20,9 +36,8 @@ const Login = () => {
 
     const validateLogin = () => {
         if(checkUserName(username)&&checkPassword(password)){
-          setIsLoggedIn(true);            
-          const index = userArr.indexOf(username);
-          setUserId(index) 
+          setIsLoggedIn(true);  
+          userData.map(i => i.username === username ? setUserId(i.id) : i.id);
           history.push('/tasks') 
           setAlert(false)
         }else{
@@ -41,20 +56,7 @@ const Login = () => {
 
    
 
-    const styles = {
-        paper : {
-            padding : 20,
-            height : '70vh',
-            width : '50vh',
-            margin : '30px auto'
-        },
-        form : {
-            display : 'flex',
-            flexDirection : 'column',
-            justifyContent : 'spaceAround',
-            gap : 5
-        }
-    }
+    
 
 
     return (
