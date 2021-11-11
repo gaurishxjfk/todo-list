@@ -47,7 +47,7 @@ export const todayDate = new Date()//.toLocaleDateString()
 
 const Homepage = () => {
 
-    const {userID,isAdmin} = UserState();
+    const {userID} = UserState();
 
     const [taskList, setTaskList] = useState(getTasks(userID).sort( compare ));
     const [task, setTask] = useState('');
@@ -57,6 +57,7 @@ const Homepage = () => {
     const [searchTask, setSearchTask] = useState('');
     const [isDoneFilter, setIsDoneFilter] = useState(false);
     const [todoForm, setTodoForm] = useState(false)
+    const [adminPanel, setAdminPanel] = useState('')
 
     var userName ;
     var userAvatar ;
@@ -91,12 +92,12 @@ const Homepage = () => {
         setTaskList(result)
     }  
     
-    if(!isAdmin){
     return (
         <>
             <Header userAvatar={userAvatar} userName={userName} 
                     setSearchTask={setSearchTask} searchTask={searchTask}
-                    isDoneFilter={isDoneFilter} setIsDoneFilter={setIsDoneFilter}/>
+                    isDoneFilter={isDoneFilter} setIsDoneFilter={setIsDoneFilter}
+                    adminPanel={adminPanel} setAdminPanel={setAdminPanel}/>
 
             <AddTask userID={userID} taskList={taskList} 
                     setTaskList={setTaskList} task={task} 
@@ -113,10 +114,17 @@ const Homepage = () => {
                     deleteTask={deleteTask} searchTask={searchTask}
                     isDoneFilter={isDoneFilter} setIsDoneFilter={setIsDoneFilter}
                     todoForm={todoForm} setTodoForm={setTodoForm}/>
+
+            {<AdminPage userID={userID} taskList={taskList} 
+                        setTaskList={setTaskList} task={task} 
+                    setTask={setTask} dateValue={dateValue} setDateValue={setDateValue}
+                    isEditing={isEditing} setIsEditing={setIsEditing}
+                    taskId={taskId} setTaskId={setTaskId} updateTask={updateTask} updateTaskList={updateTaskList}
+                    deleteTask={deleteTask} searchTask={searchTask}
+                    isDoneFilter={isDoneFilter} setIsDoneFilter={setIsDoneFilter}
+                    todoForm={todoForm} setTodoForm={setTodoForm} adminPanel={adminPanel}/>}
         </>
-    )}else{
-        <AdminPage/>
-    }
+    )
 }
 
 export default Homepage

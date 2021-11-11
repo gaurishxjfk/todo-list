@@ -1,10 +1,16 @@
 import {  Checkbox, Divider, List,  ListItem,  ListItemIcon,  ListItemText,  SwipeableDrawer } from '@mui/material'
 import { Box } from '@mui/system';
 import React, { useEffect, useState } from 'react'
+import { userData } from '../config/data';
+import { UserState } from '../context';
 
-const Sidebar = ({openSideBar,setOpenSideBar,userName,userAvatar,isDoneFilter,setIsDoneFilter}) => {
+const Sidebar = ({openSideBar,setOpenSideBar,userName,userAvatar,isDoneFilter,setIsDoneFilter,setAdminPanel}) => {
 
     var anchor = 'left';//assigning side for swipeable drawer
+
+    const {isAdmin} = UserState();
+
+    //userData.map(i => console.log(i.first_name))
     
     const [state, setState] = useState({
         left: openSideBar
@@ -45,8 +51,20 @@ const Sidebar = ({openSideBar,setOpenSideBar,userName,userAvatar,isDoneFilter,se
               <ListItem sx={{marginTop : -2}}>                 
                       <ListItemText primary="Done Tasks" />
                       <Checkbox defaultChecked={isDoneFilter} onChange={e => setIsDoneFilter(!isDoneFilter)} />                                        
-              </ListItem>
-            
+              </ListItem>            
+          </List>
+          <Divider />
+          <List style={{display : isAdmin ? 'block' : 'none'}}>
+          <ListItem >
+              <ListItemText primary="Users" />
+              </ListItem>  
+              {userData.map((user) => (
+                  <ListItem sx={{marginTop : -2, cursor:'pointer'}} key={user.id} onClick={e => setAdminPanel(user.id)}>                 
+                    <ListItemText primary={user.first_name} />                                    
+                  </ListItem>  
+              ))
+              }
+               
           </List>
          
         </Box>

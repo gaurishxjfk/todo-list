@@ -215,7 +215,8 @@ const Header = (props) => {
                   userName={props.userName} 
                   userAvatar={props.userAvatar}
                   isDoneFilter={props.isDoneFilter} 
-                  setIsDoneFilter={props.setIsDoneFilter}/>
+                  setIsDoneFilter={props.setIsDoneFilter}
+                  adminPanel={props.adminPanel} setAdminPanel={props.setAdminPanel}/>
     </Grid>
     
     </>

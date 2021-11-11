@@ -5,10 +5,28 @@ import EditIcon from '@mui/icons-material/Edit';
 import { styles } from '../Pages/Homepage';
 
 const Tasklist = (props) => {
-    if(props.list.length > 0) {
-    return (
-        <List variant="outlined">
-        {props.list.map((task) =>(
+    if(props.admin){
+        return (
+            <List variant="outlined">
+            {props.list.map((task) =>(
+                
+                <div key={task.id}>
+                <List component="nav" aria-label="secondary mailbox folders">
+                      <ListItem style={{height:'2rem'}}>
+                             
+                          <ListItemText primary={task.name} secondary={new Date(task.date).toLocaleDateString()} 
+                                          style={(task.isDone) ? styles.doneTask : styles.pendingTask  }/>  
+                        </ListItem>                                
+                  </List>                                    
+                      </div>
+                ))}                        
+            </List> 
+        )
+    }else{
+    if(props.list.length > 0) {       
+        return (
+            <List variant="outlined">
+            {props.list.map((task) =>(
             
             <div key={task.id}>
             {/*props.setTaskId(task.id)         props.setOpenModal(true)*/}
@@ -62,7 +80,8 @@ const Tasklist = (props) => {
                 </Skeleton>
                 </Typography>
                                 )
-                              }
+     }
+  }
     
 }
 
