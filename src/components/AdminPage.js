@@ -13,7 +13,7 @@ const AdminPage = () => {
       
     return (
         <Grid>
-            h
+            This is Admin
         </Grid>
     )
 }

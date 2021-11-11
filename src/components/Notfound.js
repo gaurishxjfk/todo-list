@@ -7,8 +7,6 @@ const Notfound = () => {
 
     const history = useHistory();
 
-    //history.push('/tasks') 
-
     const Div = styled('div')(({ theme }) => ({
         ...theme.typography.button,
         backgroundColor: theme.palette.background.paper,

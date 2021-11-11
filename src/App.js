@@ -11,8 +11,6 @@ import ProtectedAdmin from './components/ProtectedAdmin';
 function App() {
 
   const { isLoggedIn,isAdmin } = UserState();
-  console.log(isAdmin)
-
   
   return (
     <Router >

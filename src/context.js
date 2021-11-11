@@ -12,8 +12,7 @@ const Context = ({children}) => {
     const [userList,setUserList] = useState(getUser());
     const [isLoggedIn, setIsLoggedIn] = useState(userList !== null ? userList.isLoggedIn : false);
     const [userID, setUserId] = useState(userList !== null ? userList.id : '');
-    const [isAdmin,setIsAdmin] = useState(false)
-    console.log(isAdmin     )
+    const [isAdmin,setIsAdmin] = useState(false);
 
     useEffect(() => {
         if(userList !== null){
