@@ -1,20 +1,22 @@
 import React from 'react';
-import {Grid} from '@mui/material';
+import { getTasks } from '../Pages/Homepage';
+import Tasklist from './Tasklist';
 //import { styles } from './Login';
 //import { userData } from '../config/data';
 //import { compare } from './Addtask';
 //import { UserState } from '../context';
 
-const AdminPage = () => {
+const AdminPage = (props) => {
 
-    //c//onst {setIsLoggedIn} = UserState();
+    //const {setIsLoggedIn} = UserState();
 
     
-      
+    const results = getTasks(props.adminPanel)
+    
     return (
-        <Grid>
-            This is Admin
-        </Grid>
+        <Tasklist list={results}
+                    checkDone={props.checkDone} 
+                    admin={true} />
     )
 }
 

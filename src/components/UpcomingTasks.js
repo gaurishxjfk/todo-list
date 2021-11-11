@@ -23,7 +23,8 @@ const UpcomingTasks = (props) => {
                     taskId={props.taskId} 
                     setTaskId={props.setTaskId}
                     isDoneFilter={props.isDoneFilter}
-                    isEditing={props.isEditing} />
+                    isEditing={props.isEditing}
+                    admin={false} />
     )
 }
 
