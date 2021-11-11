@@ -46,7 +46,7 @@ export const todayDate = new Date()//.toLocaleDateString()
 
 const Homepage = () => {
 
-    const {userID} = UserState();
+    const {userID,isAdmin} = UserState();
 
     const [taskList, setTaskList] = useState(getTasks(userID).sort( compare ));
     const [task, setTask] = useState('');
