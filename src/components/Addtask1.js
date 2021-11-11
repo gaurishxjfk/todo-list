@@ -3,9 +3,7 @@ import {TextField,Button,   ListItemButton, ListItemText, Collapse, List,  Check
 import {Snackbar,Grid,Paper,Typography} from '@mui/material'
 import { UserState } from '../context';
 import { userData } from '../config/data';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
+
 import UpcomingTasks from './UpcomingTasks';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
@@ -17,7 +15,7 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';  
 import { useForm } from "react-hook-form";
 import Header from './Header';
-import { compare } from '../Pages/Homepage';
+import {  styles } from '../Pages/Homepage';
 
 
 
@@ -25,22 +23,7 @@ import { compare } from '../Pages/Homepage';
 
     
 
-    //styles
-    export const styles = {
-        paper : {
-            padding : 20,
-            height : '70vh',
-            width : '50%',
-            margin : '30px auto'
-        },
-        doneTask:{
-            textDecoration: 'line-through' ,
-            color : 'grey'
-        },
-        pendingTask:{
-            textDecoration: 'none' 
-        }
-    }
+   
 
     
 
@@ -51,14 +34,14 @@ import { compare } from '../Pages/Homepage';
          
     
 
-    const {userID,setIsLoggedIn,setUserList} = UserState();
+    const {userID} = UserState();
 
-    const [taskId, setTaskId] = useState('');
+    const [ setTaskId] = useState('');
     const [task, setTask] = useState('');
     const [taskList, setTaskList] = useState();
     const [isEditing, setIsEditing] = useState(false);
     const [alert, setAlert] = useState(false);
-    const [dateValue, setDateValue] = useState();
+    const [ setDateValue] = useState();
     const [openModal, setOpenModal] = useState(false);
     const [searchTask, setSearchTask] = useState('');
     const [tabValue, setTabValue] = useState('1');
@@ -74,22 +57,22 @@ import { compare } from '../Pages/Homepage';
       } = useForm();
     //const onSubmit = (data) => alert(JSON.stringify(data));
    
-    const addTasks = (data) => {
+    /* const addTasks = (data) => {
              checkDuplicacy(data.taskname,data.date).length > 0 ? setAlert(true)   :                                           
                 setTaskList([...taskList,addTask(data.taskname,data.date)])
                 setTask('')   
                 setDateValue()                                     
               
-    }
+    } */
 
-    const addTask = (itask,idate) => {
+    /* const addTask = (itask,idate) => {
         const id = Math.floor(Math.random() * 10000) + 1;
         return {id:id,
                 name:itask,
                 isDone: false,
                 date: idate
                 }
-    }
+    } */
 
     const deleteTask = (id) => {
         const result = taskList.filter(i => i.id !== id)
@@ -106,7 +89,7 @@ import { compare } from '../Pages/Homepage';
         setDateValue(result[0].date)
         setAlert(false)
     }  
-
+/* 
     const updateTaskList = () => {  
         setAlert(false);
 
@@ -119,9 +102,9 @@ import { compare } from '../Pages/Homepage';
         setIsEditing(false)
         setTask('')
         setDateValue()   
-    }  
+    }   */
 
-    const checkDuplicacy = (text,day) =>{
+  /*   const checkDuplicacy = (text,day) =>{
         
        return taskList.filter((itask) =>
            itask.name.toLowerCase() === text.toLowerCase()  
@@ -129,7 +112,7 @@ import { compare } from '../Pages/Homepage';
            itask.date === day
         )
         
-    }
+    } */
 
     //set todo done 
     const checkDone = (id) => { 
@@ -166,10 +149,10 @@ import { compare } from '../Pages/Homepage';
 
   const userDtls = userData.filter(i => i.id === userID)
 
-  const userLogout = () => {
-    setIsLoggedIn(false);
-    setUserList({});
-  }
+//   const userLogout = () => {
+//     setIsLoggedIn(false);
+//     setUserList({});
+//   }
   const onSubmit = (data) => {
     console.log(data);
   };
