@@ -93,7 +93,7 @@ const AddTask = (props) => {
                     </Item>
                     
                 
-                <Grid  md={6} sm={12} xs={12} spacing={{ xs: 2, md: 3 }}>
+                <Grid  md={12} sm={12} xs={12} spacing={{ xs: 2, md: 3 }}>
                 <Item>
                     <LocalizationProvider dateAdapter={AdapterDateFns} fullWidth>
                             <DesktopDatePicker

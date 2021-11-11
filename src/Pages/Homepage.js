@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import AddTask from '../components/AddTask';
+import AdminPage from '../components/AdminPage';
 import Header from '../components/Header'
 import Tasks from '../components/Tasks';
 import { userData } from '../config/data';
@@ -46,7 +47,7 @@ export const todayDate = new Date()//.toLocaleDateString()
 
 const Homepage = () => {
 
-    const {userID} = UserState();
+    const {userID,isAdmin} = UserState();
 
     const [taskList, setTaskList] = useState(getTasks(userID).sort( compare ));
     const [task, setTask] = useState('');
@@ -90,7 +91,7 @@ const Homepage = () => {
         setTaskList(result)
     }  
     
-   
+    if(!isAdmin){
     return (
         <>
             <Header userAvatar={userAvatar} userName={userName} 
@@ -113,7 +114,9 @@ const Homepage = () => {
                     isDoneFilter={isDoneFilter} setIsDoneFilter={setIsDoneFilter}
                     todoForm={todoForm} setTodoForm={setTodoForm}/>
         </>
-    )
+    )}else{
+        <AdminPage/>
+    }
 }
 
 export default Homepage

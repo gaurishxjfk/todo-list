@@ -12,7 +12,7 @@ const Context = ({children}) => {
     const [userList,setUserList] = useState(getUser());
     const [isLoggedIn, setIsLoggedIn] = useState(userList !== null ? userList.isLoggedIn : false);
     const [userID, setUserId] = useState(userList !== null ? userList.id : '');
-    
+    const [isAdmin,setIsAdmin] = useState(false);
 
     useEffect(() => {
         if(userList !== null){
@@ -22,7 +22,7 @@ const Context = ({children}) => {
     
 
     return (
-        <userContext.Provider value={{isLoggedIn, setIsLoggedIn,userID, setUserId,userList,setUserList}}>
+        <userContext.Provider value={{isLoggedIn, setIsLoggedIn,userID, setUserId,userList,setUserList,isAdmin,setIsAdmin}}>
             {children}
         </userContext.Provider>
     )
