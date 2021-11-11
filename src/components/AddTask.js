@@ -1,17 +1,15 @@
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import { Button, Container, Grid, Paper, TextField } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import { Alert, Button, Container, Grid, Snackbar, TextField } from '@mui/material'
+import React, { useEffect } from 'react'
 import { useForm } from "react-hook-form";
 import { todayDate } from '../Pages/Homepage';
 import { experimentalStyled as styled } from '@mui/material/styles';
 
-const AddTask = (props) => {
+const AddTask = (props) => {    
 
-    const [todoForm, setTodoForm] = useState(false)
-
-    const { register, handleSubmit,  formState: { errors,isSubmitSuccessful },reset,setFocus } = useForm();
+    const { register, handleSubmit,  formState: { errors,isSubmitSuccessful },reset } = useForm();
 
     const onSubmit = (data) => {
         if(props.isEditing){            
@@ -19,7 +17,8 @@ const AddTask = (props) => {
         }else{
             props.setTaskList([...props.taskList,addTask(data.taskname,props.dateValue)])
         }
-        setTodoForm(false)
+        props.setTodoForm(false)
+        handleClick();
     };
 
     const addTask = (itask,idate) => {
@@ -55,17 +54,31 @@ const AddTask = (props) => {
         localStorage.setItem(`task-${props.userID}`,JSON.stringify(props.taskList));     
     }, [props.task, props.taskList, props.userID]); 
 
+    const [open, setOpen] = React.useState(false);
+
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
     return (
     <Container >
 
         <Grid container direction='row' justifyContent='flex-end' mt={4}>            
-                <Button variant="outlined" color="success" onClick={(e) => (setTodoForm(true))}>Add New</Button>
+                <Button variant="outlined" color="success" onClick={(e) => (props.setTodoForm(true))}>Add New</Button>
             
         </Grid>
-        <Grid container style={{display : todoForm ? 'block' : 'none'}} direction='row' width={'100%'}>    
+        <Grid container style={{display : props.todoForm ? 'block' : 'none'}} direction='row' width={'100%'}>    
                
             <form onSubmit={handleSubmit(onSubmit)} style={{width:'100%'}}>
-                <Grid item md={6} sm={12} xs={12}>
+                
                     <Item>
                     <TextField
                         label="Enter Task..." variant="outlined"  
@@ -78,8 +91,9 @@ const AddTask = (props) => {
                     {errors?.taskname?.type === "required" && <p style={{color : 'red'}}>This field is required</p>}
                     {errors?.taskname?.type === "maxLength" && (<p style={{color : 'red'}}>Task name cannot exceed 20 characters</p>)}
                     </Item>
-                </Grid>
-                <Grid item md={6} sm={12} xs={12} spacing={{ xs: 2, md: 3 }}>
+                    
+                
+                <Grid  md={6} sm={12} xs={12} spacing={{ xs: 2, md: 3 }}>
                 <Item>
                     <LocalizationProvider dateAdapter={AdapterDateFns} fullWidth>
                             <DesktopDatePicker
@@ -105,7 +119,13 @@ const AddTask = (props) => {
             </form>
             
         </Grid>
+        <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
+             <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                Task {props.isEditing ? 'Updated' : 'Added'} Successfully!!
+             </Alert>
+        </Snackbar>
         </Container>
+
     )
 }
 

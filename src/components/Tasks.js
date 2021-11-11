@@ -57,7 +57,8 @@ const Tasks = (props) => {
                                             openModal={openModal} 
                                             taskId={props.taskId} 
                                             setTaskId={props.setTaskId}  
-                                            isDoneFilter={props.isDoneFilter}                                     
+                                            isDoneFilter={props.isDoneFilter} 
+                                            isEditing={props.isEditing}                                    
                         />
                 </TabPanel>
 
@@ -72,6 +73,7 @@ const Tasks = (props) => {
                                             taskId={props.taskId} 
                                             setTaskId={props.setTaskId}
                                             isDoneFilter={props.isDoneFilter} 
+                                            isEditing={props.isEditing} 
                         />
                 </TabPanel>
 

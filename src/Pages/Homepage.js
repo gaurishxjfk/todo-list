@@ -27,6 +27,23 @@ export const getTasks = (userID) => {
 
 export const todayDate = new Date()//.toLocaleDateString()
 
+ //styles
+ export const styles = {
+    paper : {
+        padding : 20,
+        height : '70vh',
+        width : '50%',
+        margin : '30px auto'
+    },
+    doneTask:{
+        textDecoration: 'line-through' ,
+        color : 'grey'
+    },
+    pendingTask:{
+        textDecoration: 'none' 
+    }
+}
+
 const Homepage = () => {
 
     const {userID} = UserState();
@@ -38,6 +55,7 @@ const Homepage = () => {
     const [taskId, setTaskId] = useState('');
     const [searchTask, setSearchTask] = useState('');
     const [isDoneFilter, setIsDoneFilter] = useState(false);
+    const [todoForm, setTodoForm] = useState(false)
 
     var userName ;
     var userAvatar ;
@@ -50,6 +68,7 @@ const Homepage = () => {
     })
 
     const updateTask = (id) => {
+        setTodoForm(true)
         setIsEditing(true)
         const result =taskList.filter(i => i.id === id)
         setTaskId(result[0].id)
@@ -82,7 +101,8 @@ const Homepage = () => {
                     setTaskList={setTaskList} task={task} 
                     setTask={setTask} dateValue={dateValue} setDateValue={setDateValue}
                     isEditing={isEditing} setIsEditing={setIsEditing}
-                    taskId={taskId} setTaskId={setTaskId} updateTask={updateTask} updateTaskList={updateTaskList}/>
+                    taskId={taskId} setTaskId={setTaskId} updateTask={updateTask} updateTaskList={updateTaskList}
+                    todoForm={todoForm} setTodoForm={setTodoForm}/>
 
             <Tasks  userID={userID} taskList={taskList} 
                     setTaskList={setTaskList} task={task} 
@@ -90,7 +110,8 @@ const Homepage = () => {
                     isEditing={isEditing} setIsEditing={setIsEditing}
                     taskId={taskId} setTaskId={setTaskId} updateTask={updateTask} updateTaskList={updateTaskList}
                     deleteTask={deleteTask} searchTask={searchTask}
-                    isDoneFilter={isDoneFilter} setIsDoneFilter={setIsDoneFilter}/>
+                    isDoneFilter={isDoneFilter} setIsDoneFilter={setIsDoneFilter}
+                    todoForm={todoForm} setTodoForm={setTodoForm}/>
         </>
     )
 }

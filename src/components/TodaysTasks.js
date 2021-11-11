@@ -28,7 +28,8 @@ const TodaysTasks = (props) => {
                                             openModal={props.openModal}
                                             taskId={props.taskId} 
                                             setTaskId={props.setTaskId}
-                                            isDoneFilter={props.isDoneFilter} />
+                                            isDoneFilter={props.isDoneFilter}
+                                            isEditing={props.isEditing}  />
     )
 }
 

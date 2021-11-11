@@ -1,8 +1,8 @@
 import { Button, Checkbox, Dialog, DialogActions, DialogTitle, IconButton, List, ListItem, ListItemText, Skeleton, Typography } from '@mui/material'
 import React from 'react'
-import { styles } from './Addtask1'
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import { styles } from '../Pages/Homepage';
 
 const Tasklist = (props) => {
     if(props.list.length > 0) {
@@ -20,6 +20,8 @@ const Tasklist = (props) => {
                       <ListItemText primary={task.name} secondary={new Date(task.date).toLocaleDateString()} 
                                       style={(task.isDone) ? styles.doneTask : styles.pendingTask  }/>
 
+                      {props.isEditing?'' : 
+                      <>
                       <IconButton  aria-label="edit" onClick={e => props.updateTask(task.id)}>
                               <EditIcon/>
                       </IconButton>
@@ -27,6 +29,8 @@ const Tasklist = (props) => {
                       <IconButton  aria-label="delete" onClick={(e) => (props.onDelete(task.id))}>
                               <DeleteIcon />
                       </IconButton>
+                      </>
+                      }
 
                       <Dialog
                               open={props.openModal}
