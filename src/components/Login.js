@@ -23,42 +23,44 @@ export const styles = {
 
 const Login = () => {
 
-    const {  setIsLoggedIn, setUserId} = UserState();
+    const {  setIsLoggedIn, setUserId,setUserList} = UserState();
 
     const history = useHistory();
 
     var userArr = userData.map(i => i.username);
     var passArr = userData.map(i => i.password);
-
+    
     const [username,setUsername] = useState();
     const [password,setPassword] = useState();
     const [alert, setAlert] = useState(false);
+    const [alertMsg, setAlertMsg] = useState('');
 
-    const validateLogin = () => {
-        if(checkUserName(username)&&checkPassword(password)){
-          setIsLoggedIn(true);  
-          userData.map(i => i.username === username ? setUserId(i.id) : i.id);
-          history.push('/tasks') 
-          setAlert(false)
-        }else{
-            setAlert(true)
-        }
-      }
-    
-      const checkUserName = (text) =>{
+    const checkUserName = (text) =>{
         return userArr.includes(text)
-     }
-     
+    }     
     
      const checkPassword = (text) =>{
       return passArr.includes(text)
     }
 
-   
+    const validateLogin = () => {
 
+        if(checkUserName(username)&&checkPassword(password)){    //checks if userid & pass is correct         
+            userData.forEach((i) => ((i.username === username) && setUserSession(i.id)));          
+            history.push('/tasks') 
+        }else{
+            setAlert(true)
+            setAlertMsg('Incorrect Credentials')
+        }
+
+    }
+
+    const setUserSession = (user) => {
+        setIsLoggedIn(true); 
+        setUserId(user);
+        setUserList({id : user, isLoggedIn :true})
+    }
     
-
-
     return (
         <Grid>
             <Paper elevation={11} style={styles.paper}>
@@ -74,7 +76,8 @@ const Login = () => {
                      <Snackbar
                         open={alert}
                         autoHideDuration={2000}
-                        message="Incorrect Credentials"
+                        message={alertMsg}
+                        onClose={(e) => setAlert(false)}
                     />             
             </Paper>
         </Grid>

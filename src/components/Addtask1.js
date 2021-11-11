@@ -14,26 +14,23 @@ import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import TodaysTasks from './TodaysTasks';
 import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
+import ExpandMore from '@mui/icons-material/ExpandMore';  
+import { useForm } from "react-hook-form";
+import Header from './Header';
+import { compare } from '../Pages/Homepage';
 
 
-    //function to sort Done todos
-    export const compare = ( a, b ) => {
-        if ( a.isDone < b.isDone){
-        return -1;
-        }
-        if ( a.isDone > b.isDone ){
-        return 1;
-        }
-        return 0;
-    }
+
+
+
+    
 
     //styles
     export const styles = {
         paper : {
             padding : 20,
             height : '70vh',
-            width : '50vh',
+            width : '50%',
             margin : '30px auto'
         },
         doneTask:{
@@ -45,42 +42,44 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
         }
     }
 
-    export const todayDate = new Date()//.toLocaleDateString()
-
-const Addtask = () => {
-
-    const getTasks = () => {
-        const result = localStorage.getItem(`task-${userID}`);
-        if(result){
-            return JSON.parse(result)
-        }else{
-            return []
-        }        
-    }       
     
 
-    const {userID,setIsLoggedIn} = UserState();
+    
+
+    const Addtask = () => {
+
+         
+    
+
+    const {userID,setIsLoggedIn,setUserList} = UserState();
 
     const [taskId, setTaskId] = useState('');
     const [task, setTask] = useState('');
-    const [taskList, setTaskList] = useState(getTasks().sort( compare ));
+    const [taskList, setTaskList] = useState();
     const [isEditing, setIsEditing] = useState(false);
     const [alert, setAlert] = useState(false);
-    const [dateValue, setDateValue] = useState(todayDate);
+    const [dateValue, setDateValue] = useState();
     const [openModal, setOpenModal] = useState(false);
     const [searchTask, setSearchTask] = useState('');
     const [tabValue, setTabValue] = useState('1');
     const [openFilter, setOpenFilter] = useState(false);
     const [isDoneFilter, setIsDoneFilter] = useState(false);
 
-    const addTasks = () => {
-        if(!task){}
-        else{
-            checkDuplicacy(task,dateValue).length > 0 ? setAlert(true)   :                                           
-                setTaskList([...taskList,addTask(task,dateValue)])
+
+    const {
+        register,
+        handleSubmit,
+        watch,
+        formState: { errors }
+      } = useForm();
+    //const onSubmit = (data) => alert(JSON.stringify(data));
+   
+    const addTasks = (data) => {
+             checkDuplicacy(data.taskname,data.date).length > 0 ? setAlert(true)   :                                           
+                setTaskList([...taskList,addTask(data.taskname,data.date)])
                 setTask('')   
-                setDateValue(todayDate)                                     
-        }        
+                setDateValue()                                     
+              
     }
 
     const addTask = (itask,idate) => {
@@ -99,6 +98,7 @@ const Addtask = () => {
     }     
     
     const updateTask = (id) => {
+        
         setIsEditing(true)
         const result =taskList.filter(i => i.id === id)
         setTaskId(result[0].id)
@@ -118,7 +118,7 @@ const Addtask = () => {
        }       
         setIsEditing(false)
         setTask('')
-        setDateValue(todayDate)   
+        setDateValue()   
     }  
 
     const checkDuplicacy = (text,day) =>{
@@ -151,10 +151,12 @@ const Addtask = () => {
             setTabValue(newValue);
     };
 
-    const filteredResults = //isDoneFilter ? 
+    const filteredResults = isDoneFilter ? 
     taskList.filter(i => i.name.includes(searchTask) && i.isDone === isDoneFilter)
-     //   :
-    // taskList.filter(i => i.name.includes(searchTask) )
+        :
+    taskList.filter(i => i.name.includes(searchTask) )
+
+   
 
      const handleClickFilter = () => {
     setOpenFilter(!openFilter);
@@ -163,16 +165,45 @@ const Addtask = () => {
   };
 
   const userDtls = userData.filter(i => i.id === userID)
-  
-    
+
+  const userLogout = () => {
+    setIsLoggedIn(false);
+    setUserList({});
+  }
+  const onSubmit = (data) => {
+    console.log(data);
+  };
+  console.log(watch("example"));
     return (
+        <>
+        <Header userAvatar={userDtls[0].avatar} userName={userDtls[0].first_name}/>
         <Grid>
-            <Button variant="outlined"  onClick={() => setIsLoggedIn(false) } fullWidth>Logout</Button> 
+            
             <Paper elevation={10} style={styles.paper}>
                 <Grid align='center'>
                      <img src={userDtls[0].avatar} alt="" style={{borderRadius : '10rem',height:'3rem',width: 'auto'}}/>
                     <Typography variant="h5">Hello {userDtls[0].first_name}</Typography> 
                 </Grid> 
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <TextField
+                        label="Enter Task..." variant="outlined" fullWidth 
+                        {...register("taskname", {
+                        required: true,
+                        maxLength: 20,
+                        })}
+                    />
+                    {errors?.taskname?.type === "required" && <p>This field is required</p>}
+                    {errors?.taskname?.type === "maxLength" && (
+                        <p>Task name cannot exceed 20 characters</p>
+                    )}
+                     <Button variant="outlined" 
+                                //onClick={isEditing?updateTaskList:addTasks} 
+                                style={{height:'3.55rem'}} type="submit">
+                                {isEditing?'Update':'Add'}
+                                
+                            </Button>  
+                    </form>
+                {/* <form onSubmit={handleSubmit(isEditing?updateTaskList:addTasks)}>
                 <Grid  align='center'  > 
                   <TextField id="outlined-basic" label="Enter Task..." variant="outlined" 
                         onChange={(e) => {setTask(e.target.value) 
@@ -180,6 +211,7 @@ const Addtask = () => {
                                     }} 
                         value={task}
                         fullWidth   
+                        inputRef={register("taskname", { required: true, maxLength: 20 })}
                     />
                     <Grid container mt={2} justifyContent='space-evenly'>   
                         <Grid item>
@@ -198,13 +230,15 @@ const Addtask = () => {
                         </Grid>
                         <Grid item>
                             <Button variant="outlined" 
-                                onClick={isEditing?updateTaskList:addTasks} 
-                                style={{height:'3.55rem'}}>
+                                //onClick={isEditing?updateTaskList:addTasks} 
+                                style={{height:'3.55rem'}} type="submit">
                                 {isEditing?'Update':'Add'}
+                                
                             </Button>  
                         </Grid>
                     </Grid>
-                </Grid>             
+                </Grid>     
+                </form>          */}
                     <Snackbar
                         open={alert}
                         autoHideDuration={2000}
@@ -213,7 +247,7 @@ const Addtask = () => {
                     />
 
                     <Paper elevation={4} sx={{mt : 2,display:'flex',flexDirection:'row' , justifyContent:'space-between'}}>
-                    <Grid item lg={12} p={1}>
+                    <Grid item lg={11} p={1}>
                             <TextField id="outlined-basic" label="Search Task..." variant="outlined" type='search'                               
                                  fullWidth        onChange={e => setSearchTask(e.target.value)} size="small"
                             />
@@ -262,10 +296,9 @@ const Addtask = () => {
                             />
                         </TabPanel>
                     </TabContext>
-
-                  { }
-        </Paper>
+            </Paper>
     </Grid>
+    </>
     )
 }
 

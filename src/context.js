@@ -1,15 +1,28 @@
-import React, {  createContext, useContext, useState } from 'react'
+import React, {  createContext, useContext, useEffect, useState } from 'react'
 
 const userContext = createContext();
 
 const Context = ({children}) => {
 
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [userID, setUserId] = useState();
+    const getUser = () => {
+        return JSON.parse(localStorage.getItem('users'));    
+    }
+
+    
+    const [userList,setUserList] = useState(getUser());
+    const [isLoggedIn, setIsLoggedIn] = useState(userList !== null ? userList.isLoggedIn : false);
+    const [userID, setUserId] = useState(userList !== null ? userList.id : '');
+    
+
+    useEffect(() => {
+        if(userList !== null){
+            localStorage.setItem('users',JSON.stringify(userList));   
+        }        
+    }, [userList]); 
     
 
     return (
-        <userContext.Provider value={{isLoggedIn, setIsLoggedIn,userID, setUserId}}>
+        <userContext.Provider value={{isLoggedIn, setIsLoggedIn,userID, setUserId,userList,setUserList}}>
             {children}
         </userContext.Provider>
     )
