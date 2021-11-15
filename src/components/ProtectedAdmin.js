@@ -4,7 +4,7 @@ import { UserState } from '../context';
 
 const ProtectedAdmin = props => {
     const { isAdmin } = UserState();
-    console.log(isAdmin)
+
     if(!isAdmin){
         return <Redirect to='/' />
     }

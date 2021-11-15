@@ -23,7 +23,7 @@ export const styles = {
 
 const Login = () => {
 
-    const {  setIsLoggedIn, setUserId,setUserList,setIsAdmin} = UserState();
+    const {  setIsLoggedIn, setUserId,setUserList} = UserState();
 
     const history = useHistory();
 
@@ -45,10 +45,8 @@ const Login = () => {
 
     const validateLogin = () => {
 
-        if(checkUserName(username)&&checkPassword(password)){    //checks if userid & pass is correct         
-            userData.forEach((i) => ((i.username === username) && setUserSession(i.id)));  
-            username === 'admin' ? setIsAdmin(true) : setIsAdmin(false)     
-            history.push('/tasks') 
+        if(checkUserName(username)&&checkPassword(password)){    //checks if userid & pass is correct    
+            userData.forEach((i) => ((i.username === username) && setUserSession(i.id,i.username)));             
         }else{
             setAlert(true)
             setAlertMsg('Incorrect Credentials')
@@ -56,10 +54,11 @@ const Login = () => {
 
     }
 
-    const setUserSession = (user) => {
+    const setUserSession = (user,uname) => {
         setIsLoggedIn(true); 
         setUserId(user);
-        setUserList({id : user, isLoggedIn :true})
+        setUserList({id : user, isLoggedIn :true, isAdmin: uname === 'admin' ? true : false})
+        uname === 'admin' ? history.push('/admin') : history.push('/tasks');
     }
     
     return (

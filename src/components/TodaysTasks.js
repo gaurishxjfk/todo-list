@@ -30,6 +30,7 @@ const TodaysTasks = (props) => {
                                             setTaskId={props.setTaskId}
                                             isDoneFilter={props.isDoneFilter}
                                             isEditing={props.isEditing}
+                                            setIsDoneFilter={props.setIsDoneFilter}   
                                             admin={false}  />
     )
 }

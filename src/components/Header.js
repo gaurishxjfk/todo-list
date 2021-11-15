@@ -12,8 +12,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MoreIcon from '@mui/icons-material/MoreVert';
-import Sidebar from './Sidebar';
-import { Grid } from '@mui/material';
 import { UserState } from '../context';
 
 
@@ -70,7 +68,7 @@ const Header = (props) => {
       const mobileMenuId = 'primary-search-account-menu-mobile';
 
       const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
-      const [openSideBar,setOpenSideBar] = useState(false);
+      
 
       const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -131,7 +129,7 @@ const Header = (props) => {
             props.setSearchTask(event.target.value);
           };
 
-
+          
     return (
         <>
     <Box sx={{ flexGrow: 1 }}>
@@ -144,7 +142,7 @@ const Header = (props) => {
                 color="inherit"
                 aria-label="open drawer"
                 sx={{ mr: 2 }}
-                onClick={e => setOpenSideBar(!openSideBar)}
+                onClick={e => props.setOpenSideBar(!props.openSideBar)}
             >
                 <MenuIcon />
             </IconButton>
@@ -209,15 +207,9 @@ const Header = (props) => {
      
     </Box>
 
-    <Grid>
-          <Sidebar openSideBar={openSideBar} 
-                  setOpenSideBar={setOpenSideBar} 
-                  userName={props.userName} 
-                  userAvatar={props.userAvatar}
-                  isDoneFilter={props.isDoneFilter} 
-                  setIsDoneFilter={props.setIsDoneFilter}
-                  adminPanel={props.adminPanel} setAdminPanel={props.setAdminPanel}/>
-    </Grid>
+    
+         
+    
     
     </>
     )

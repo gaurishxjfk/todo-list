@@ -1,16 +1,17 @@
 import {  Checkbox, Divider, List,  ListItem,  ListItemIcon,  ListItemText,  SwipeableDrawer } from '@mui/material'
 import { Box } from '@mui/system';
 import React, { useEffect, useState } from 'react'
+import { Link, useRouteMatch   } from 'react-router-dom';
 import { userData } from '../config/data';
 import { UserState } from '../context';
 
-const Sidebar = ({openSideBar,setOpenSideBar,userName,userAvatar,isDoneFilter,setIsDoneFilter,setAdminPanel}) => {
+const Sidebar = ({openSideBar,setOpenSideBar,userName,userAvatar,isDoneFilter,setIsDoneFilter,setAdminPanel,setUserPath}) => {
 
     var anchor = 'left';//assigning side for swipeable drawer
 
     const {isAdmin} = UserState();
 
-    //userData.map(i => console.log(i.first_name))
+    let { path } = useRouteMatch();
     
     const [state, setState] = useState({
         left: openSideBar
@@ -28,6 +29,11 @@ const Sidebar = ({openSideBar,setOpenSideBar,userName,userAvatar,isDoneFilter,se
         setOpenSideBar(false)
         setState({ ...state, [anchor]: open });
       };
+
+      const setAdminRoute = (id) => {
+        setAdminPanel(id)
+        
+      }
     
       const list = (anchor) => (
         <Box
@@ -59,9 +65,19 @@ const Sidebar = ({openSideBar,setOpenSideBar,userName,userAvatar,isDoneFilter,se
               <ListItemText primary="Users" />
               </ListItem>  
               {userData.map((user) => (
-                  <ListItem sx={{marginTop : -2, cursor:'pointer'}} key={user.id} onClick={e => setAdminPanel(user.id)}>                 
-                    <ListItemText primary={user.first_name} />                                    
-                  </ListItem>  
+                <React.Fragment key={user.id}>
+
+                  <Link to={`${path}/${user.first_name}`} style={{textDecoration:'none'}}>
+                      <ListItem sx={{ cursor:'pointer'}}  onClick={(e) => {setAdminRoute(user.id)
+                                                                                          setUserPath(`${path}/${user.first_name}`)}  }>                 
+                      <ListItemIcon>
+                          <img src={user.avatar} alt="" style={{borderRadius : '10rem',height:'2.6rem',width: 'auto'}}/>
+                      </ListItemIcon>
+                      <ListItemText primary={user.first_name} />                                    
+                    </ListItem>  
+                  </Link>                  
+
+                </React.Fragment>
               ))
               }
                
@@ -93,7 +109,9 @@ const Sidebar = ({openSideBar,setOpenSideBar,userName,userAvatar,isDoneFilter,se
                 </>            
             )
      }else{
-         return(<></>)
+         return(<>
+                
+         </>)
      }
 }
 

@@ -6,20 +6,21 @@ import { UserState } from './context';
 import Homepage from './Pages/Homepage';
 import ProtectedRoute from './components/ProtectedRoute';
 import Notfound from './components/Notfound';
-//import ProtectedAdmin from './components/ProtectedAdmin';
+import AdminPage from './components/AdminPage';
+import ProtectedAdmin from './components/ProtectedAdmin';
 
 function App() {
 
-  const { isLoggedIn } = UserState();
+  const { isLoggedIn,isAdmin } = UserState();
   
   return (
     <Router >
        <Switch>
             <Route path="/" exact>
-                {isLoggedIn?<Redirect to="/tasks" />:<Login/> }
+                {isAdmin ? <Redirect to="/admin" /> : isLoggedIn ? <Redirect to="/tasks" /> : <Login/> }
               </Route>   
               <ProtectedRoute path="/tasks" component={Homepage}/>   
-              {/* <ProtectedAdmin path="/admin" component={AdminPage}/> */}
+              <ProtectedAdmin path="/admin" component={AdminPage}/> 
               <Route >
                   <Notfound/>
               </Route> 

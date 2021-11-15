@@ -1,10 +1,14 @@
 import React, { useState } from 'react'
+import { UserState } from '../context';
 import AddTask from '../components/AddTask';
-import AdminPage from '../components/AdminPage';
 import Header from '../components/Header'
 import Tasks from '../components/Tasks';
 import { userData } from '../config/data';
-import { UserState } from '../context';
+import AdminUserslist from '../components/AdminUserslist';
+import Sidebar from '../components/Sidebar';
+import {  Switch } from 'react-router';
+import ProtectedAdmin from '../components/ProtectedAdmin';
+
 
 //function to sort Done todos
 export const compare = ( a, b ) => {
@@ -47,7 +51,7 @@ export const todayDate = new Date()//.toLocaleDateString()
 
 const Homepage = () => {
 
-    const {userID} = UserState();
+    const {userID,isAdmin,isDoneFilter,setIsDoneFilter} = UserState();
 
     const [taskList, setTaskList] = useState(getTasks(userID).sort( compare ));
     const [task, setTask] = useState('');
@@ -55,9 +59,11 @@ const Homepage = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [taskId, setTaskId] = useState('');
     const [searchTask, setSearchTask] = useState('');
-    const [isDoneFilter, setIsDoneFilter] = useState(false);
+    
     const [todoForm, setTodoForm] = useState(false)
     const [adminPanel, setAdminPanel] = useState('')
+    const [openSideBar,setOpenSideBar] = useState(false);
+    const [userPath, setUserPath] = useState('')
 
     var userName ;
     var userAvatar ;
@@ -87,7 +93,6 @@ const Homepage = () => {
     } 
 
     const deleteTask = (id) => {
-        
         const result = taskList.filter(i => i.id !== id)
         setTaskList(result)
     }  
@@ -97,32 +102,60 @@ const Homepage = () => {
             <Header userAvatar={userAvatar} userName={userName} 
                     setSearchTask={setSearchTask} searchTask={searchTask}
                     isDoneFilter={isDoneFilter} setIsDoneFilter={setIsDoneFilter}
-                    adminPanel={adminPanel} setAdminPanel={setAdminPanel}/>
+                    adminPanel={adminPanel} setAdminPanel={setAdminPanel}
+                    setOpenSideBar={setOpenSideBar} openSideBar={openSideBar}/>
 
-            <AddTask userID={userID} taskList={taskList} 
-                    setTaskList={setTaskList} task={task} 
-                    setTask={setTask} dateValue={dateValue} setDateValue={setDateValue}
-                    isEditing={isEditing} setIsEditing={setIsEditing}
-                    taskId={taskId} setTaskId={setTaskId} updateTask={updateTask} updateTaskList={updateTaskList}
-                    todoForm={todoForm} setTodoForm={setTodoForm}/>
+            {!isAdmin ? <>
+                            <AddTask userID={userID} taskList={taskList} 
+                                    setTaskList={setTaskList} task={task} 
+                                    setTask={setTask} dateValue={dateValue} setDateValue={setDateValue}
+                                    isEditing={isEditing} setIsEditing={setIsEditing}
+                                    taskId={taskId} setTaskId={setTaskId} updateTask={updateTask} updateTaskList={updateTaskList}
+                                    todoForm={todoForm} setTodoForm={setTodoForm}/>
 
-            <Tasks  userID={userID} taskList={taskList} 
-                    setTaskList={setTaskList} task={task} 
-                    setTask={setTask} dateValue={dateValue} setDateValue={setDateValue}
-                    isEditing={isEditing} setIsEditing={setIsEditing}
-                    taskId={taskId} setTaskId={setTaskId} updateTask={updateTask} updateTaskList={updateTaskList}
-                    deleteTask={deleteTask} searchTask={searchTask}
-                    isDoneFilter={isDoneFilter} setIsDoneFilter={setIsDoneFilter}
-                    todoForm={todoForm} setTodoForm={setTodoForm}/>
+                            <Tasks  userID={userID} taskList={taskList} 
+                                    setTaskList={setTaskList} task={task} 
+                                    setTask={setTask} dateValue={dateValue} setDateValue={setDateValue}
+                                    isEditing={isEditing} setIsEditing={setIsEditing}
+                                    taskId={taskId} setTaskId={setTaskId} updateTask={updateTask} updateTaskList={updateTaskList}
+                                    deleteTask={deleteTask} searchTask={searchTask}
+                                    isDoneFilter={isDoneFilter} setIsDoneFilter={setIsDoneFilter}
+                                    todoForm={todoForm} setTodoForm={setTodoForm}
+                                    />
+                         </>
 
-            {<AdminPage userID={userID} taskList={taskList} 
+                    :
+                        <Switch>                   
+                        <ProtectedAdmin path={userPath}>
+                            <AdminUserslist adminPanel={adminPanel} userID={adminPanel} isDoneFilter={isDoneFilter} 
+                                    setIsDoneFilter={setIsDoneFilter} task={task} 
+                                    setTask={setTask} dateValue={dateValue} setDateValue={setDateValue}
+                                    isEditing={isEditing} setIsEditing={setIsEditing}
+                                    taskId={taskId} setTaskId={setTaskId} updateTask={updateTask} updateTaskList={updateTaskList}
+                                    deleteTask={deleteTask} searchTask={searchTask}
+                                    todoForm={todoForm} setTodoForm={setTodoForm}/> 
+                        </ProtectedAdmin>
+                    </Switch>
+                    }
+
+                <Sidebar openSideBar={openSideBar} 
+                  setOpenSideBar={setOpenSideBar} 
+                  userName={userName} 
+                  userAvatar={userAvatar}
+                  isDoneFilter={isDoneFilter} 
+                  setIsDoneFilter={setIsDoneFilter}
+                  adminPanel={adminPanel} setAdminPanel={setAdminPanel}
+                  setUserPath={setUserPath}/>
+                  
+                 
+            {/* {<AdminPage userID={userID} taskList={taskList} 
                         setTaskList={setTaskList} task={task} 
                     setTask={setTask} dateValue={dateValue} setDateValue={setDateValue}
                     isEditing={isEditing} setIsEditing={setIsEditing}
                     taskId={taskId} setTaskId={setTaskId} updateTask={updateTask} updateTaskList={updateTaskList}
                     deleteTask={deleteTask} searchTask={searchTask}
                     isDoneFilter={isDoneFilter} setIsDoneFilter={setIsDoneFilter}
-                    todoForm={todoForm} setTodoForm={setTodoForm} adminPanel={adminPanel}/>}
+                    todoForm={todoForm} setTodoForm={setTodoForm} adminPanel={adminPanel}/>} */}
         </>
     )
 }
