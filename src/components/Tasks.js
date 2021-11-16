@@ -9,6 +9,8 @@ import UpcomingTasks from './UpcomingTasks'
 
 const Tasks = (props) => {
 
+    
+    
     const [tabValue, setTabValue] = useState('1');
 
     const [openModal, setOpenModal] = useState(false);
@@ -33,6 +35,7 @@ const Tasks = (props) => {
                                 props.taskList.filter(i => i.name.includes(props.searchTask) && i.isDone === props.isDoneFilter)
                                 :
                                 props.taskList.filter(i => i.name.includes(props.searchTask))
+                                console.log(props.searchTask)
 
     return (
         <Container>
@@ -58,7 +61,8 @@ const Tasks = (props) => {
                                             taskId={props.taskId} 
                                             setTaskId={props.setTaskId}  
                                             isDoneFilter={props.isDoneFilter} 
-                                            isEditing={props.isEditing}                                    
+                                            isEditing={props.isEditing}  
+                                            setIsDoneFilter={props.setIsDoneFilter}                                  
                         />
                 </TabPanel>
 
@@ -74,9 +78,11 @@ const Tasks = (props) => {
                                             setTaskId={props.setTaskId}
                                             isDoneFilter={props.isDoneFilter} 
                                             isEditing={props.isEditing} 
+                                            setIsDoneFilter={props.setIsDoneFilter}   
                         />
                 </TabPanel>
-
+                
+                
         </TabContext>
         </Container>
     )
