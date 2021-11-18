@@ -10,7 +10,7 @@ import { experimentalStyled as styled } from '@mui/material/styles';
 
 const AddTask = (props) => {    
 
-  
+
 
     const { register, handleSubmit,  formState: { errors,isSubmitSuccessful },reset } = useForm();
 
@@ -26,7 +26,7 @@ const AddTask = (props) => {
 
     const addTask = (itask,idate) => {
         const id = Math.floor(Math.random() * 10000) + 1;
-        return { id:id, name:itask, isDone: false, date: idate }
+        return { id:id, name:itask, isDone: false, date: idate, isEditing : false }
     }
 
     const Item = styled(Grid)(({ theme }) => ({

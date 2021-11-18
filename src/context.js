@@ -14,6 +14,7 @@ const Context = ({children}) => {
     const [userID, setUserId] = useState(userList !== null ? userList.id : '');
     const [isAdmin,setIsAdmin] = useState(userList !== null ? userList.isAdmin : '');
     const [isDoneFilter, setIsDoneFilter] = useState(false);
+    const [isEdit, setIsEdit] = useState('');
 
     useEffect(() => {
         if(userList !== null){
@@ -29,7 +30,8 @@ const Context = ({children}) => {
                                         userID, setUserId,
                                         userList,setUserList,
                                         isAdmin,setIsAdmin,
-                                        isDoneFilter, setIsDoneFilter}}>
+                                        isDoneFilter, setIsDoneFilter,
+                                        isEdit, setIsEdit}}>
             {children}
         </userContext.Provider>
     )

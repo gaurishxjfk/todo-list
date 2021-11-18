@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -8,9 +8,13 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { UserState } from '../context';
-import { Button, Checkbox, Dialog, DialogActions, DialogTitle, IconButton } from '@mui/material';
+import { Button, Checkbox, Container, Dialog, DialogActions, DialogTitle, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import ToDo from './ToDo';
+import AddTaskIcon from '@mui/icons-material/AddTask';
+import AddTaskModal from './AddTaskModal'
+import { compare, getTasks } from '../Pages/Homepage';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -36,11 +40,31 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const TableComp = (props) => {
 
-    const {isAdmin,isDoneFilter,setIsDoneFilter} = UserState();
+  const {userID,isDoneFilter,setIsDoneFilter,isEdit,setIsEdit} = UserState();
 
-    return (<>
+  const [taskData, setTaskData]= useState(JSON.parse(localStorage.getItem(`task-${userID}`)));
+
+  const [editingMode, setEditingMode]= useState(false);
+  const [openModal, setOpenModal] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem(`task-${userID}`,JSON.stringify(taskData));     
+}, [taskData,userID]); 
+
+    const editMode = (id) => {
+      setIsEdit(id)
+      setEditingMode(true)
+      setOpenModal(true)
+    }
+
+  
+  
+    const handleOpenModal = () => setOpenModal(true);
+    const handleCloseModal = () => setOpenModal(false);
+
+    return (<Container sx={{display : 'flex',flexDirection : 'row', flexWrap : 'wrap '}}>
     
-        <TableContainer component={Paper}>
+        {/* <TableContainer component={Paper}>
         Show Done Tasks
              <Checkbox defaultChecked={isDoneFilter} onChange={e => setIsDoneFilter(!isDoneFilter)} /> 
           <Table sx={{ minWidth: 380 }} aria-label="customized table">
@@ -99,7 +123,19 @@ const TableComp = (props) => {
                                                   props.setOpenModal(false)}} autoFocus>Yes</Button>
                               </DialogActions>
                           </Dialog>
-        </TableContainer></>
+        </TableContainer> */}
+        <AddTaskModal {...props} openModal={openModal} 
+        taskData={taskData} setTaskData={setTaskData} 
+        editMode={editMode}
+        editingMode={editingMode} setEditingMode={setEditingMode}
+        openModal={openModal} setOpenModal={setOpenModal}/>
+
+         {taskData === null ? '' :
+              taskData.map((row) => (
+                <ToDo {...props} row={row} setOpenModal={setOpenModal} editMode={editMode} setIsEdit={setIsEdit}/>
+              ))}  
+
+        </Container>
       );
 }
 

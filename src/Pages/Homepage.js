@@ -8,6 +8,7 @@ import AdminUserslist from '../components/AdminUserslist';
 import Sidebar from '../components/Sidebar';
 import {  Switch } from 'react-router';
 import ProtectedAdmin from '../components/ProtectedAdmin';
+import TableComp from '../components/TableComp';
 
 
 //function to sort Done todos
@@ -24,7 +25,7 @@ export const compare = ( a, b ) => {
 export const getTasks = (userID) => {
     const result = localStorage.getItem(`task-${userID}`);
     if(result){
-        return JSON.parse(result)
+        return console.log('ross')//JSON.parse(result)
     }else{
         return []
     }        
@@ -53,7 +54,7 @@ const Homepage = () => {
 
     const {userID,isAdmin,isDoneFilter,setIsDoneFilter} = UserState();
 
-    const [taskList, setTaskList] = useState(getTasks(userID).sort( compare ));
+    //const [taskList, setTaskList] = useState(getTasks(userID).sort( compare ));
     const [task, setTask] = useState('');
     const [dateValue, setDateValue] = useState(todayDate);
     const [isEditing, setIsEditing] = useState(false);
@@ -75,27 +76,27 @@ const Homepage = () => {
         }
     })
 
-    const updateTask = (id) => {
-        setTodoForm(true)
-        setIsEditing(true)
-        const result =taskList.filter(i => i.id === id)
-        setTaskId(result[0].id)
-        setTask(result[0].name)
-        setDateValue(result[0].date)
-    }  
+    // const updateTask = (id) => {
+    //     setTodoForm(true)
+    //     setIsEditing(id)
+    //     const result =taskList.filter(i => i.id === id)
+    //     setTaskId(result[0].id)
+    //     setTask(result[0].name)
+    //     setDateValue(result[0].date)
+    // }  
 
-    const updateTaskList = (updated) => {  
-            const result =taskList.map((i) => (i.id === taskId ? {...i, name : updated,date : dateValue}  : i  ))
-            setTaskList(result)     
-            setIsEditing(false)
-            setTask('')
-            setDateValue(todayDate)   
-    } 
+    // const updateTaskList = (updated) => {  
+    //         const result =taskList.map((i) => (i.id === taskId ? {...i, name : updated,date : dateValue }  : i  ))
+    //         setTaskList(result)     
+    //         setIsEditing(false)
+    //         setTask('')
+    //         setDateValue(todayDate)   
+    // } 
 
-    const deleteTask = (id) => {
-        const result = taskList.filter(i => i.id !== id)
-        setTaskList(result)
-    }  
+    // const deleteTask = (id) => {
+    //     const result = taskList.filter(i => i.id !== id)
+    //     setTaskList(result)
+    // }  
     
     return (
         <>
@@ -105,7 +106,7 @@ const Homepage = () => {
                     adminPanel={adminPanel} setAdminPanel={setAdminPanel}
                     setOpenSideBar={setOpenSideBar} openSideBar={openSideBar}/>
 
-            {!isAdmin ? <>
+            {/* {!isAdmin ? <>
                             <AddTask userID={userID} taskList={taskList} 
                                     setTaskList={setTaskList} task={task} 
                                     setTask={setTask} dateValue={dateValue} setDateValue={setDateValue}
@@ -136,7 +137,7 @@ const Homepage = () => {
                                     todoForm={todoForm} setTodoForm={setTodoForm}/> 
                         </ProtectedAdmin>
                     </Switch>
-                    }
+                    } */}
 
                 <Sidebar openSideBar={openSideBar} 
                   setOpenSideBar={setOpenSideBar} 
@@ -147,7 +148,13 @@ const Homepage = () => {
                   adminPanel={adminPanel} setAdminPanel={setAdminPanel}
                   setUserPath={setUserPath}/>
                   
-                 
+                 <TableComp userID={userID}  task={task} 
+                                    setTask={setTask} dateValue={dateValue} setDateValue={setDateValue}
+                                    isEditing={isEditing} setIsEditing={setIsEditing}
+                                    taskId={taskId} setTaskId={setTaskId} //updateTask={updateTask} updateTaskList={updateTaskList}
+                                     searchTask={searchTask}
+                                    isDoneFilter={isDoneFilter} setIsDoneFilter={setIsDoneFilter}
+                                    todoForm={todoForm} setTodoForm={setTodoForm}/>
             {/* {<AdminPage userID={userID} taskList={taskList} 
                         setTaskList={setTaskList} task={task} 
                     setTask={setTask} dateValue={dateValue} setDateValue={setDateValue}

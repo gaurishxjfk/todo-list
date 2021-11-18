@@ -166,7 +166,7 @@ const Header = (props) => {
                 placeholder="Search…"
                 onChange={onSearch}
                 inputProps={{ 'aria-label': 'search' }}
-                autoFocus = 'true'
+                // autoFocus = 'true'
                 value = {props.searchTask  }
                 />
             </Search>          
