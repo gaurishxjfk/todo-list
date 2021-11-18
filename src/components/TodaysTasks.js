@@ -14,24 +14,11 @@ const TodaysTasks = (props) => {
     const onDelete = (id) => {
         props.setTaskId(id)         
         props.setOpenModal(true)
-    }
-    
-    
+    }    
 
     return (
         <Tasklist onDelete={onDelete} list={todaysArr.sort( compare )}
-                    checkDone={props.checkDone} 
-                    updateTask={props.updateTask}
-                    setOpenModal={props.setOpenModal}                                            
-                    handleClose={props.handleClose}
-                    deleteTask={props.deleteTask}
-                                            openModal={props.openModal}
-                                            taskId={props.taskId} 
-                                            setTaskId={props.setTaskId}
-                                            isDoneFilter={props.isDoneFilter}
-                                            isEditing={props.isEditing}
-                                            setIsDoneFilter={props.setIsDoneFilter}   
-                                            admin={false}  />
+                    {...props}  admin={false}  />
     )
 }
 

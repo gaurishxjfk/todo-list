@@ -14,17 +14,7 @@ const UpcomingTasks = (props) => {
 
     return (
         <Tasklist onDelete={onDelete} list={upcomingArr.sort( compare )}
-                    checkDone={props.checkDone} 
-                    updateTask={props.updateTask}
-                    setOpenModal={props.setOpenModal}                                            
-                    handleClose={props.handleClose}
-                    deleteTask={props.deleteTask}
-                    openModal={props.openModal}
-                    taskId={props.taskId} 
-                    setTaskId={props.setTaskId}
-                    isDoneFilter={props.isDoneFilter}
-                    isEditing={props.isEditing}
-                    admin={false} />
+                    {...props} />
     )
 }
 
