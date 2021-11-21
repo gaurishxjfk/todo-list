@@ -1,4 +1,4 @@
-export default [
+export const events = [
     {
       id: 0,
       title: "All Day Event very long title",

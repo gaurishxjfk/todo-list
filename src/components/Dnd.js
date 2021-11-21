@@ -1,8 +1,7 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import events from "./events";
-import HTML5Backend from "react-dnd-html5-backend";
-import { DragDropContext } from "react-dnd";
+// import HTML5Backend from "react-dnd-html5-backend";
+// import { DragDropContext } from "react-dnd";
 import BigCalendar from "react-big-calendar";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import moment from "moment";
@@ -36,7 +35,7 @@ class Dnd extends React.Component {
     const { events } = this.state;
 
     const nextEvents = events.map(existingEvent => {
-      return existingEvent.id == event.id
+      return existingEvent.id === event.id
         ? { ...existingEvent, start, end }
         : existingEvent;
     });
@@ -65,6 +64,6 @@ class Dnd extends React.Component {
   }
 }
 
-const Calendar = DragDropContext(HTML5Backend)(Dnd);
+//const Calendar = DragDropContext(HTML5Backend)(Dnd);
 
 export default Dnd

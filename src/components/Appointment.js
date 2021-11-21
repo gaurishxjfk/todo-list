@@ -130,7 +130,7 @@ export default class Appointment extends Component {
         { id: 30, number: 6, isReserved: true }
       ]
     ];
-    const { loading, continuousLoading } = this.state;
+    const {  continuousLoading } = this.state;
     return (
       <div>
         
