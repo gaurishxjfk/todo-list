@@ -32,10 +32,9 @@ const Tasks = (props) => {
         }
 
         const filteredResults = props.isDoneFilter ? 
-                                props.taskList.filter(i => i.name.includes(props.searchTask) && i.isDone === props.isDoneFilter)
+                                props.taskList.filter(i => i.Task.includes(props.searchTask) && i.isDone === props.isDoneFilter)
                                 :
-                                props.taskList.filter(i => i.name.includes(props.searchTask))
-                                console.log(props.searchTask)
+                                props.taskList.filter(i => i.Task.includes(props.searchTask));
 
     return (
         <Container>

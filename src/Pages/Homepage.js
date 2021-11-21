@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { UserState } from '../context';
 import AddTask from '../components/AddTask';
 import Header from '../components/Header'
@@ -8,6 +8,15 @@ import AdminUserslist from '../components/AdminUserslist';
 import Sidebar from '../components/Sidebar';
 import {  Switch } from 'react-router';
 import ProtectedAdmin from '../components/ProtectedAdmin';
+import AddTaskModal from '../components/AddTaskModal';
+import ToDo from '../components/ToDo'
+import { Button, Container, Dialog, DialogActions, DialogTitle } from '@mui/material';
+import Appointment from '../components/Appointment';
+import Dnd from '../components/Dnd';
+import 'react-big-calendar/lib/css/react-big-calendar.css'
+import Calender from '../components/Calender';
+import TabList from '@mui/lab/TabList';
+import TabMenuListBar from '../components/TabMenuListBar';
 
 
 //function to sort Done todos
@@ -49,6 +58,8 @@ export const todayDate = new Date()//.toLocaleDateString()
     }
 }
 
+
+
 const Homepage = () => {
 
     const {userID,isAdmin,isDoneFilter,setIsDoneFilter} = UserState();
@@ -59,14 +70,22 @@ const Homepage = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [taskId, setTaskId] = useState('');
     const [searchTask, setSearchTask] = useState('');
-    
+    const [openModal, setOpenModal] = useState(false);
     const [todoForm, setTodoForm] = useState(false)
     const [adminPanel, setAdminPanel] = useState('')
     const [openSideBar,setOpenSideBar] = useState(false);
-    const [userPath, setUserPath] = useState('')
+    const [userPath, setUserPath] = useState('');
+    const [openDelModal, setOpenDelModal] = useState(false);
 
     var userName ;
     var userAvatar ;
+
+    const setEditingMode = (id) => {
+        setTodoForm(true)
+        setIsEditing(true)
+        setOpenModal(true)
+        setTaskId(id)
+    }
 
     userData.forEach((i) => {
         if(i.id === userID){
@@ -76,12 +95,13 @@ const Homepage = () => {
     })
 
     const updateTask = (id) => {
-        setTodoForm(true)
-        setIsEditing(true)
-        const result =taskList.filter(i => i.id === id)
-        setTaskId(result[0].id)
-        setTask(result[0].name)
-        setDateValue(result[0].date)
+        setEditingMode(id);
+        const result =taskList.filter(i => i.id === id)        
+        
+        // setTask(result[0].name)
+        // setDateValue(result[0].date)
+
+        console.log(result)
     }  
 
     const updateTaskList = (updated) => {  
@@ -92,10 +112,53 @@ const Homepage = () => {
             setDateValue(todayDate)   
     } 
 
-    const deleteTask = (id) => {
-        const result = taskList.filter(i => i.id !== id)
+    const delModalOpen = (id) => {
+        setOpenDelModal(true)
+        setTaskId(id)
+    }
+
+    const deleteTask = () => {        
+        const result = taskList.filter(i => i.id !== taskId)
         setTaskList(result)
     }  
+
+    const handleClose = (event, reason) => {
+        setOpenDelModal(false);
+    }
+
+    useEffect(() => {
+        localStorage.setItem(`task-${userID}`,JSON.stringify(taskList));     
+    }, [taskList, userID]); 
+
+
+    const eventObj = (id,task,date,desc) => {
+
+        return {
+            id: id,
+            title: task,
+            allDay: true,
+            start: new Date(date),
+            end: new Date(date),
+            desc: desc
+        }
+    }
+
+    const filteredResults = isDoneFilter ? 
+                          taskList.filter(i => ((i.Task.includes(searchTask)) || (i.date.includes(searchTask))) && i.isDone === isDoneFilter)
+                          :
+                          taskList.filter(i => (i.Task.includes(searchTask)) || (i.date.includes(searchTask)));
+
+    const eventlist = filteredResults.map((task) => (
+        eventObj(task.id,task.Task,task.date,task.Description)
+    ))
+
+    const updateDate = (id,date) => {
+        const result = taskList.map((task) => (
+            (task.id === id ? {...task, date : date} : {...task})  
+        ))
+        setTaskList(result)
+    } 
+
     
     return (
         <>
@@ -105,7 +168,7 @@ const Homepage = () => {
                     adminPanel={adminPanel} setAdminPanel={setAdminPanel}
                     setOpenSideBar={setOpenSideBar} openSideBar={openSideBar}/>
 
-            {!isAdmin ? <>
+            {/* {!isAdmin ? <>
                             <AddTask userID={userID} taskList={taskList} 
                                     setTaskList={setTaskList} task={task} 
                                     setTask={setTask} dateValue={dateValue} setDateValue={setDateValue}
@@ -136,7 +199,7 @@ const Homepage = () => {
                                     todoForm={todoForm} setTodoForm={setTodoForm}/> 
                         </ProtectedAdmin>
                     </Switch>
-                    }
+                    } */}
 
                 <Sidebar openSideBar={openSideBar} 
                   setOpenSideBar={setOpenSideBar} 
@@ -146,16 +209,50 @@ const Homepage = () => {
                   setIsDoneFilter={setIsDoneFilter}
                   adminPanel={adminPanel} setAdminPanel={setAdminPanel}
                   setUserPath={setUserPath}/>
+
+                  <TabMenuListBar openModal={openModal} 
+                                    setOpenModal={setOpenModal} 
+                                    taskList={taskList} 
+                                    setTaskList={setTaskList}
+                                    isEditing={isEditing}
+                                    setIsEditing={setIsEditing}
+                                    updateTaskList={updateTaskList}
+                                    taskId={taskId}
+                                    updateTask={updateTask} 
+                                    delModalOpen={delModalOpen}
+                                    eventlist={eventlist} 
+                                    updateDate={updateDate}
+                                    userID={userID}
+                                    task={task} 
+                                    setTask={setTask} dateValue={dateValue} setDateValue={setDateValue} setTaskId={setTaskId} 
+                                    deleteTask={deleteTask} searchTask={searchTask}
+                                    isDoneFilter={isDoneFilter} setIsDoneFilter={setIsDoneFilter}
+                                    todoForm={todoForm} setTodoForm={setTodoForm} />
+
                   
-                 
-            {/* {<AdminPage userID={userID} taskList={taskList} 
-                        setTaskList={setTaskList} task={task} 
-                    setTask={setTask} dateValue={dateValue} setDateValue={setDateValue}
-                    isEditing={isEditing} setIsEditing={setIsEditing}
-                    taskId={taskId} setTaskId={setTaskId} updateTask={updateTask} updateTaskList={updateTaskList}
-                    deleteTask={deleteTask} searchTask={searchTask}
-                    isDoneFilter={isDoneFilter} setIsDoneFilter={setIsDoneFilter}
-                    todoForm={todoForm} setTodoForm={setTodoForm} adminPanel={adminPanel}/>} */}
+
+                        {/* <Container sx={{display : 'flex' , flexWrap : 'wrap' , justifyContent : 'space-around'}}>
+                            { taskList.map((task) => (<ToDo task={task} key={task.id} updateTask={updateTask} delModalOpen={delModalOpen}/>))} 
+                        </Container> */}
+                        <Dialog
+                              open={openDelModal}
+                              onClose={handleClose}
+                              aria-labelledby="alert-dialog-title"
+                              aria-describedby="alert-dialog-description"
+                          >
+                              <DialogTitle id="alert-dialog-title">{"Delete the todo from the list?"}</DialogTitle>
+                              
+                              <DialogActions>
+                              <Button onClick={handleClose}>No</Button>
+                              <Button onClick={e => {deleteTask(taskId) ;  setOpenDelModal(false)}} autoFocus>Yes</Button>
+                              </DialogActions>
+                          </Dialog>
+                                    
+                  {/* <Appointment/> */}
+                  {/* <Dnd/> */}
+                  
+                  {/* <Calender eventlist={eventlist} updateDate={updateDate}/> */}
+
         </>
     )
 }

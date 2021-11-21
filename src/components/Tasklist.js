@@ -9,9 +9,7 @@ import TableComp from './TableComp';
 
 
 const Tasklist = (props) => {
-    const {isAdmin,isDoneFilter,setIsDoneFilter} = UserState();
-
-   
+    const {isAdmin,isDoneFilter,setIsDoneFilter} = UserState(); 
 
       
    
