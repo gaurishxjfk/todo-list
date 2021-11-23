@@ -6,6 +6,7 @@ import { Box } from '@mui/system'
 import React, { useState } from 'react'
 import TodaysTasks from './TodaysTasks'
 import UpcomingTasks from './UpcomingTasks'
+import arrayCheck from '../Pages/Homepage'
 
 const Tasks = (props) => {
 
@@ -32,9 +33,16 @@ const Tasks = (props) => {
         }
 
         const filteredResults = props.isDoneFilter ? 
-                                props.taskList.filter(i => i.Task.includes(props.searchTask) && i.isDone === props.isDoneFilter)
-                                :
-                                props.taskList.filter(i => i.Task.includes(props.searchTask));
+        arrayCheck(props.taskList) && 
+          props.taskList.filter(i => (
+                (i.Task.includes(props.searchTask)) || (i.date.includes(props.searchTask))) 
+                && 
+                i.isDone === props.isDoneFilter)
+        : 
+        arrayCheck(props.taskList) && 
+          props.taskList.filter(i => (
+                i.Task.includes(props.searchTask)) || (i.date.includes(props.searchTask)));
+
 
     return (
         <Container>

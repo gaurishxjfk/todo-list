@@ -7,11 +7,12 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { UserState } from '../context';
 import { Button, Checkbox, Dialog, DialogActions, DialogTitle, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
+import { UserState } from '../context';
+import arrayCheck from '../Pages/Homepage'
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -67,7 +68,7 @@ const TableComp = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-            {props.rows.length === 0 ? '' :
+            {arrayCheck(props.rows) &&
               props.rows.map((row) => (
                 <StyledTableRow key={row.id}>
                   <StyledTableCell component="th" scope="row">

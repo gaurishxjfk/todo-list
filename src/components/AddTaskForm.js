@@ -1,33 +1,26 @@
-import {  Container,  TextField } from '@mui/material';
-
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import {  Container,  TextField } from '@mui/material';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import Button from '@mui/material/Button';
+import arrayCheck from '../Pages/Homepage'
+import {patterns} from './Regex'
+
+let taskRegex = patterns.taskName;
 
  const getTaskErrMsg = (type) => {
-     if(type === 'maxLength'){
-         return 'Task name should not exceed 15 characters'
-     }if(type === 'pattern'){
-        return 'Only alphabets and number allowed'
-     }if(type === 'required'){
-        return 'Task name is required'
-     }
+    return type === 'maxLength' ?  'Task name should not exceed 15 characters'
+            : type === 'pattern' ?  'Only alphabets and number allowed'
+            : 'Task name is required'  
  }
 
  const getDescErrMsg = (type) => {
-    if(type === 'maxLength'){
-        return 'Description should not exceed 50 characters'
-    }if(type === 'required'){
-       return 'Description is required'
-    }
+    return type === 'maxLength' ? 'Description should not exceed 50 characters'  : 'Description is required'
 }
 
-
-
 const AddTaskForm = (props) => {
-
+    
     const { isEditing , taskList , taskId , setTaskList , setIsEditing , setOpenModal } = props;
 
     const { register, handleSubmit, formState: { errors },reset } = useForm();
@@ -36,7 +29,7 @@ const AddTaskForm = (props) => {
 
     const onSubmit = (data) => {
         if(isEditing){
-          let result =  taskList.map((task) => (
+          let result =  arrayCheck(taskList) && taskList.map((task) => (
                 task.id === taskId ? { ...data , 
                                     date : startDate, 
                                     id : taskId, 
@@ -60,7 +53,7 @@ const AddTaskForm = (props) => {
 
     useEffect(() => {        
         if(isEditing){
-            const result = taskList.filter(i => i.id === taskId)  
+            const result = arrayCheck(taskList) && taskList.filter(i => i.id === taskId)  
             reset({ Task : result[0].Task,  Description : result[0].Description  })
             setStartDate(result[0].date)
         }
@@ -68,14 +61,14 @@ const AddTaskForm = (props) => {
     
     
     const [startDate, setStartDate] = useState(new Date());
-
+console.log(taskRegex)
     return (
         
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Container sx={{padding : 2,display : 'flex', flexDirection : 'column',justifyContent : 'space-between',height : 300}}>
                 <div >
                     <TextField type="text" placeholder="Task" fullWidth
-                        {...register("Task", {required: true, max: 15, maxLength: 15, pattern: /^[a-zA-Z0-9_.-]*$/i})} 
+                        {...register("Task", {required: true, max: 15, maxLength: 15, pattern: taskRegex})} 
                         helperText={errors.Task ? getTaskErrMsg(errors.Task.type) :false}
                         error={errors.Task ? true : false} />
                 </div>   
@@ -89,7 +82,7 @@ const AddTaskForm = (props) => {
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <KeyboardDatePicker disableToolbar variant="inline" inputVariant="outlined"
                             label='Date'
-                            format="dd/MMM/yyyy"
+                            format={patterns.dateFormat}
                             value={startDate}
                             onChange={(date) => setStartDate(date)}
                             disablePast={true}
@@ -99,7 +92,7 @@ const AddTaskForm = (props) => {
                     </MuiPickersUtilsProvider>
                 </div>   
                 <div>       
-                    <Button type="submit" disabled={String(startDate) === 'Invalid Date' ? true : false} className='add-btn'>
+                    <Button type="submit" disabled={String(startDate) === 'Invalid Date' ? true : false} className='button__submitTask'>
                         {isEditing ? 'Update' : 'Add'}
                     </Button>    
                 </div>   

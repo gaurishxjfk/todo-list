@@ -1,11 +1,11 @@
 import React from 'react'
 import { compare, todayDate } from '../Pages/Homepage';
 import Tasklist from './Tasklist';
-
+import arrayCheck from '../Pages/Homepage'
 
 const TodaysTasks = (props) => {
 
-    const todaysArr = props.taskList.filter((i) =>  {
+    const todaysArr = arrayCheck(props.taskList) && props.taskList.filter((i) =>  {
        let date1 =  new Date(i.date) 
        let date2 =  new Date(todayDate) 
         return date1.toDateString() === date2.toDateString()

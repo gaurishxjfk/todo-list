@@ -1,10 +1,11 @@
 import React from 'react';
 import { compare, todayDate } from '../Pages/Homepage';
 import Tasklist from './Tasklist';
+import arrayCheck from '../Pages/Homepage';
 
 const UpcomingTasks = (props) => {
    
-    const upcomingArr = props.taskList.filter(i =>  new Date(i.date) > new Date(todayDate))
+    const upcomingArr = arrayCheck(props.taskList) && props.taskList.filter(i =>  new Date(i.date) > new Date(todayDate))
 
     const onDelete = (id) => {
         props.setTaskId(id)         

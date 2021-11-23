@@ -1,21 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { UserState } from '../context';
-//import AddTask from '../components/AddTask';
-import Header from '../components/Header'
-//import Tasks from '../components/Tasks';
-import { userData } from '../config/data';
-//import AdminUserslist from '../components/AdminUserslist';
-import Sidebar from '../components/Sidebar';
-// import {  Switch } from 'react-router';
-// import ProtectedAdmin from '../components/ProtectedAdmin';
-// import AddTaskModal from '../components/AddTaskModal';
-// import ToDo from '../components/ToDo'
 import { Button, Dialog, DialogActions, DialogTitle } from '@mui/material';
-//import Appointment from '../components/Appointment';
-//import Dnd from '../components/Dnd';
 import 'react-big-calendar/lib/css/react-big-calendar.css'
-// import Calender from '../components/Calender';
-// import TabList from '@mui/lab/TabList';
+import { UserState } from '../context';
+import Header from '../components/Header';
+import { userData } from '../config/data';
+import Sidebar from '../components/Sidebar';
 import TabMenuListBar from '../components/TabMenuListBar';
 
 
@@ -39,7 +28,7 @@ export const getTasks = (userID) => {
     }        
 }  
 
-export const todayDate = new Date()//.toLocaleDateString()
+export const todayDate = new Date();
 
  //styles
  export const styles = {
@@ -58,11 +47,19 @@ export const todayDate = new Date()//.toLocaleDateString()
     }
 }
 
+export const arrayCheck = (arr) => {
+    if(Array.isArray(arr) && arr.length){
+        return arr
+    }else{
+        return []
+    }
+}
+
 
 
 const Homepage = () => {
 
-    const {userID,isAdmin,isDoneFilter,setIsDoneFilter} = UserState();
+    const {userID,isDoneFilter,setIsDoneFilter} = UserState();
 
     const [taskList, setTaskList] = useState(getTasks(userID).sort( compare ));
     const [task, setTask] = useState('');
@@ -85,27 +82,24 @@ const Homepage = () => {
         setIsEditing(true)
         setOpenModal(true)
         setTaskId(id)
+        alert('adad')
     }
-
-    userData.forEach((i) => {
+console.log((arrayCheck(taskList)) ? 'true':'false')
+    userData.find((i) => {
         if(i.id === userID){
             userName = i.first_name;
             userAvatar = i.avatar;
         }
+        return ''
     })
 
     const updateTask = (id) => {
         setEditingMode(id);
-        const result =taskList.filter(i => i.id === id)        
-        
-        // setTask(result[0].name)
-        // setDateValue(result[0].date)
-
-        console.log(result)
     }  
 
     const updateTaskList = (updated) => {  
-            const result =taskList.map((i) => (i.id === taskId ? {...i, name : updated,date : dateValue}  : i  ))
+        console.log('here')
+            const result = arrayCheck(taskList) && taskList.map((i) => (i.id === taskId ? {...i, name : updated,date : dateValue}  : i  ))
             setTaskList(result)     
             setIsEditing(false)
             setTask('')
@@ -118,7 +112,7 @@ const Homepage = () => {
     }
 
     const deleteTask = () => {        
-        const result = taskList.filter(i => i.id !== taskId)
+        const result = arrayCheck(taskList) && taskList.filter(i => i.id !== taskId)
         setTaskList(result)
     }  
 
@@ -144,16 +138,21 @@ const Homepage = () => {
     }
 
     const filteredResults = isDoneFilter ? 
-                          taskList.filter(i => ((i.Task.includes(searchTask)) || (i.date.includes(searchTask))) && i.isDone === isDoneFilter)
-                          :
-                          taskList.filter(i => (i.Task.includes(searchTask)) || (i.date.includes(searchTask)));
+                        arrayCheck(taskList) && taskList.filter(i => (
+                                                (i.Task.includes(searchTask)) || (i.date.includes(searchTask))
+                                                ) && (
+                                                    i.isDone === isDoneFilter))
+                            :
+                          arrayCheck(taskList) && taskList.filter(i => (
+                                    i.Task.includes(searchTask)) || (i.date.includes(searchTask))
+                                    );
 
-    const eventlist = filteredResults.map((task) => (
+    const eventlist = arrayCheck(filteredResults) && filteredResults.map((task) => (
         eventObj(task.id,task.Task,task.date,task.Description)
     ))
 
     const updateDate = (id,date) => {
-        const result = taskList.map((task) => (
+        const result = arrayCheck(taskList) && taskList.map((task) => (
             (task.id === id ? {...task, date : date} : {...task})  
         ))
         setTaskList(result)
@@ -167,39 +166,6 @@ const Homepage = () => {
                     isDoneFilter={isDoneFilter} setIsDoneFilter={setIsDoneFilter}
                     adminPanel={adminPanel} setAdminPanel={setAdminPanel}
                     setOpenSideBar={setOpenSideBar} openSideBar={openSideBar}/>
-
-            {/* {!isAdmin ? <>
-                            <AddTask userID={userID} taskList={taskList} 
-                                    setTaskList={setTaskList} task={task} 
-                                    setTask={setTask} dateValue={dateValue} setDateValue={setDateValue}
-                                    isEditing={isEditing} setIsEditing={setIsEditing}
-                                    taskId={taskId} setTaskId={setTaskId} updateTask={updateTask} updateTaskList={updateTaskList}
-                                    todoForm={todoForm} setTodoForm={setTodoForm}/>
-
-                            <Tasks  userID={userID} taskList={taskList} 
-                                    setTaskList={setTaskList} task={task} 
-                                    setTask={setTask} dateValue={dateValue} setDateValue={setDateValue}
-                                    isEditing={isEditing} setIsEditing={setIsEditing}
-                                    taskId={taskId} setTaskId={setTaskId} updateTask={updateTask} updateTaskList={updateTaskList}
-                                    deleteTask={deleteTask} searchTask={searchTask}
-                                    isDoneFilter={isDoneFilter} setIsDoneFilter={setIsDoneFilter}
-                                    todoForm={todoForm} setTodoForm={setTodoForm}
-                                    />
-                         </>
-
-                    :
-                        <Switch>                   
-                        <ProtectedAdmin path={userPath}>
-                            <AdminUserslist adminPanel={adminPanel} userID={adminPanel} isDoneFilter={isDoneFilter} 
-                                    setIsDoneFilter={setIsDoneFilter} task={task} 
-                                    setTask={setTask} dateValue={dateValue} setDateValue={setDateValue}
-                                    isEditing={isEditing} setIsEditing={setIsEditing}
-                                    taskId={taskId} setTaskId={setTaskId} updateTask={updateTask} updateTaskList={updateTaskList}
-                                    deleteTask={deleteTask} searchTask={searchTask}
-                                    todoForm={todoForm} setTodoForm={setTodoForm}/> 
-                        </ProtectedAdmin>
-                    </Switch>
-                    } */}
 
                 <Sidebar openSideBar={openSideBar} 
                   setOpenSideBar={setOpenSideBar} 
@@ -231,9 +197,6 @@ const Homepage = () => {
 
                   
 
-                        {/* <Container sx={{display : 'flex' , flexWrap : 'wrap' , justifyContent : 'space-around'}}>
-                            { taskList.map((task) => (<ToDo task={task} key={task.id} updateTask={updateTask} delModalOpen={delModalOpen}/>))} 
-                        </Container> */}
                         <Dialog
                               open={openDelModal}
                               onClose={handleClose}
@@ -247,11 +210,7 @@ const Homepage = () => {
                               <Button onClick={e => {deleteTask(taskId) ;  setOpenDelModal(false)}} autoFocus>Yes</Button>
                               </DialogActions>
                           </Dialog>
-                                    
-                  {/* <Appointment/> */}
-                  {/* <Dnd/> */}
-                  
-                  {/* <Calender eventlist={eventlist} updateDate={updateDate}/> */}
+
 
         </>
     )

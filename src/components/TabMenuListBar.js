@@ -1,14 +1,14 @@
 import React from 'react'
 import Box from '@mui/material/Box';
 import { Container, Tab, Tabs, Typography } from '@mui/material';
-import AddTaskModal from './AddTaskModal';
-import ToDo from './ToDo';
-import Calender from './Calender';
 import TodayIcon from '@mui/icons-material/Today';
 import ListIcon from '@mui/icons-material/List';
 import GridOnIcon from '@mui/icons-material/GridOn';
 import Tasks from './Tasks';
-//import ReactHTMLTableToExcel from 'react-html-table-to-excel';  
+import AddTaskModal from './AddTaskModal';
+import ToDo from './ToDo';
+import Calender from './Calender';
+import arrayCheck from '../Pages/Homepage'
 
 function TabPanel(props) {
 
@@ -42,9 +42,15 @@ const TabMenuListBar = (props) => {
 
 
   const filteredResults = props.isDoneFilter ? 
-                          props.taskList.filter(i => ((i.Task.includes(props.searchTask)) || (i.date.includes(props.searchTask))) && i.isDone === props.isDoneFilter)
-                          :
-                          props.taskList.filter(i => (i.Task.includes(props.searchTask)) || (i.date.includes(props.searchTask)));
+                          arrayCheck(props.taskList) && 
+                            props.taskList.filter(i => (
+                                  (i.Task.includes(props.searchTask)) || (i.date.includes(props.searchTask))) 
+                                  && 
+                                  i.isDone === props.isDoneFilter)
+                          : 
+                          arrayCheck(props.taskList) && 
+                            props.taskList.filter(i => (
+                                  i.Task.includes(props.searchTask)) || (i.date.includes(props.searchTask)));
 
 
     return (
@@ -60,7 +66,7 @@ const TabMenuListBar = (props) => {
           <>
               <AddTaskModal  {...props}/>
               <Container sx={{display : 'flex' , flexWrap : 'wrap' , justifyContent : 'space-around'}}>
-                                  { filteredResults.map((taskData) => (
+                                  {arrayCheck(filteredResults) && filteredResults.map((taskData) => (
                                       <ToDo  key={taskData.id} taskData={taskData} {...props}/>
                                   ))} 
               </Container>

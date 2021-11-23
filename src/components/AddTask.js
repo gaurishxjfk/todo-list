@@ -1,11 +1,11 @@
+import React, { useEffect } from 'react'
+import { useForm } from "react-hook-form";
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { Alert, Button, Container, Grid, Snackbar, TextField } from '@mui/material'
-import React, { useEffect } from 'react'
-import { useForm } from "react-hook-form";
-import { todayDate } from '../Pages/Homepage';
 import { experimentalStyled as styled } from '@mui/material/styles';
+import { todayDate } from '../Pages/Homepage';
 
 
 const AddTask = (props) => {    
@@ -47,8 +47,7 @@ const AddTask = (props) => {
             reset({ taskname: props.task });
             
         }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isSubmitSuccessful , reset , props.setDateValue,props.isEditing]);
+    }, [isSubmitSuccessful , reset , props]);
 
     
 
@@ -73,10 +72,6 @@ const AddTask = (props) => {
 
     return (
     <Container >
-            {/* <Grid container direction='row' justifyContent='flex-start' alignItems='flex-end' mt={4}>   
-               
-             </Grid> */}
-
         <Grid container direction='row' justifyContent='flex-end' mt={4}>            
                 <Button variant="outlined" color="success" onClick={(e) => (props.setTodoForm(true))}>Add New</Button>
             
@@ -114,7 +109,6 @@ const AddTask = (props) => {
                             </LocalizationProvider>
 
                             <Button variant="outlined" 
-                                //onClick={isEditing?updateTaskList:addTasks} 
                                 style={{height:'3.55rem'}} type="submit">
                                 {props.isEditing?'Update':'Add'}
                                 
