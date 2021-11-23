@@ -1,12 +1,11 @@
+import React from 'react'
 import { Container, IconButton, Modal } from '@mui/material'
 import Box from '@mui/material/Box';
-//import Button from '@mui/material/Button';
 import AddTaskIcon from '@mui/icons-material/AddTask';
-//import Typography from '@mui/material/Typography';
-import React from 'react'
-import AddTaskForm from './AddTaskForm';
 import Fade from '@mui/material/Fade';
-const style = {
+import AddTaskForm from './AddTaskForm';
+
+ const style = {
     position: 'absolute',
     top: '50%',
     left: '50%',
@@ -20,7 +19,9 @@ const style = {
     p: 4,
     pt:6
   };
-const   AddTaskModal = (props) => {
+
+
+const AddTaskModal = (props) => {
     
     const handleOpenModal = () => props.setOpenModal(true);
     
@@ -30,12 +31,11 @@ const   AddTaskModal = (props) => {
     };
     
     return (
-        <Container fluid>
-        {/* <AddTaskIcon  style={{marginLeft : '3rem',fontSize : 50, cursor:'pointer', color : '#1976d2'}} color="success"/> */}
+        <Container>
         <IconButton variant="contained" 
                 onClick={handleOpenModal}                 
-                sx={{backgroundColor : '#1976d2'}}>
-                    <AddTaskIcon  />
+                style={{width : '100%'}}>
+                    <AddTaskIcon  sx={{fontSize : '2rem',backgroundColor : '#1976d2',borderRadius : '50%',p:1,color : '#ffffff'}}/>
                     </IconButton>
     
             <Modal open={props.openModal}

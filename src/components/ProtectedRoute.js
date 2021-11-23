@@ -5,6 +5,7 @@ import { UserState } from '../context';
 const ProtectedRoute = props => {
 
     const { isLoggedIn } = UserState();
+    
     if(!isLoggedIn){
         return <Redirect to='/' />
     }

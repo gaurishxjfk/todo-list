@@ -1,17 +1,15 @@
+import React, { useEffect, useState } from 'react'
 import {  Checkbox, Divider, List,  ListItem,  ListItemIcon,  ListItemText,  SwipeableDrawer } from '@mui/material'
 import { Box } from '@mui/system';
-import React, { useEffect, useState } from 'react'
-import { Link, useRouteMatch   } from 'react-router-dom';
-import { userData } from '../config/data';
 import { UserState } from '../context';
 
-const Sidebar = ({openSideBar,setOpenSideBar,userName,userAvatar,isDoneFilter,setIsDoneFilter,setAdminPanel,setUserPath}) => {
+const Sidebar = (props) => {
 
-    var anchor = 'left';//assigning side for swipeable drawer
+  const {openSideBar,setOpenSideBar,userName,userAvatar,isDoneFilter,setIsDoneFilter,addUserOpenModal} = props;
+
+    var anchor = 'left';
 
     const {isAdmin} = UserState();
-
-    let { path } = useRouteMatch();
     
     const [state, setState] = useState({
         left: openSideBar
@@ -30,10 +28,6 @@ const Sidebar = ({openSideBar,setOpenSideBar,userName,userAvatar,isDoneFilter,se
         setState({ ...state, [anchor]: open });
       };
 
-      const setAdminRoute = (id) => {
-        setAdminPanel(id)
-        
-      }
     
       const list = (anchor) => (
         <Box
@@ -64,23 +58,12 @@ const Sidebar = ({openSideBar,setOpenSideBar,userName,userAvatar,isDoneFilter,se
           <ListItem >
               <ListItemText primary="Users" />
               </ListItem>  
-              {userData.map((user) => (
-                <React.Fragment key={user.id}>
 
-                  <Link to={`${path}/${user.first_name}`} style={{textDecoration:'none'}}>
-                      <ListItem sx={{ cursor:'pointer'}}  onClick={(e) => {setAdminRoute(user.id)
-                                                                                          setUserPath(`${path}/${user.first_name}`)}  }>                 
-                      <ListItemIcon>
-                          <img src={user.avatar} alt="" style={{borderRadius : '10rem',height:'2.6rem',width: 'auto'}}/>
-                      </ListItemIcon>
-                      <ListItemText primary={user.first_name} />                                    
-                    </ListItem>  
-                  </Link>                  
-
-                </React.Fragment>
-              ))
-              }
-               
+                <ListItem >
+                  <ListItemText primary='Add User' 
+                                style={{cursor:'pointer'}}
+                                onClick={() => addUserOpenModal()} />
+              </ListItem>  
           </List>
          
         </Box>
@@ -98,20 +81,19 @@ const Sidebar = ({openSideBar,setOpenSideBar,userName,userAvatar,isDoneFilter,se
      if(openSideBar){        
             return (       
                 <>
-                <SwipeableDrawer
-                    anchor={anchor}
-                    open={state[anchor]}
-                    onClose={toggleDrawer(anchor, false)}
-                    onOpen={toggleDrawer(anchor, true)}
-                >
-                    {list(anchor)}
-                </SwipeableDrawer>
+
+                  <SwipeableDrawer
+                      anchor={anchor}
+                      open={state[anchor]}
+                      onClose={toggleDrawer(anchor, false)}
+                      onOpen={toggleDrawer(anchor, true)}
+                  >
+                      {list(anchor)}
+                  </SwipeableDrawer>
                 </>            
             )
      }else{
-         return(<>
-                
-         </>)
+         return(<></>)
      }
 }
 

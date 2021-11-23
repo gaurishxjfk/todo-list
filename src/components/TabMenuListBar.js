@@ -1,19 +1,16 @@
-import React from 'react'
-import Box from '@mui/material/Box';
+import React from 'react';
 import { Container, Tab, Tabs, Typography } from '@mui/material';
-import AddTaskModal from './AddTaskModal';
-import ToDo from './ToDo';
-import Calender from './Calender';
+import Box from '@mui/material/Box';
 import TodayIcon from '@mui/icons-material/Today';
 import ListIcon from '@mui/icons-material/List';
 import GridOnIcon from '@mui/icons-material/GridOn';
 import Tasks from './Tasks';
-//import ReactHTMLTableToExcel from 'react-html-table-to-excel';  
+import AddTaskModal from './AddTaskModal';
+import ToDo from './ToDo';
+import Calender from './Calender';
 
 function TabPanel(props) {
-
   const { children, value, index, ...other } = props;
-
   return (
     <div
       role="tabpanel"
@@ -34,17 +31,24 @@ function TabPanel(props) {
 
 const TabMenuListBar = (props) => {
 
+  const {isDoneFilter,taskList,searchTask,setTaskList} = props;
+
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
+  //set todo done 
+  const checkDone = (id) => { 
+    setTaskList(taskList.map((i) => (i.id === id ? {...i,isDone : !i.isDone}: i)))
+}  
 
-  const filteredResults = props.isDoneFilter ? 
-                          props.taskList.filter(i => ((i.Task.includes(props.searchTask)) || (i.date.includes(props.searchTask))) && i.isDone === props.isDoneFilter)
+
+  const filteredResults = isDoneFilter ? 
+                          taskList.filter(i => ((i.Task.includes(searchTask)) || (i.date.includes(searchTask))) && i.isDone === isDoneFilter)
                           :
-                          props.taskList.filter(i => (i.Task.includes(props.searchTask)) || (i.date.includes(props.searchTask)));
+                          taskList.filter(i => (i.Task.includes(searchTask)) || (i.date.includes(searchTask)));
 
 
     return (
@@ -61,7 +65,7 @@ const TabMenuListBar = (props) => {
               <AddTaskModal  {...props}/>
               <Container sx={{display : 'flex' , flexWrap : 'wrap' , justifyContent : 'space-around'}}>
                                   { filteredResults.map((taskData) => (
-                                      <ToDo  key={taskData.id} taskData={taskData} {...props}/>
+                                      <ToDo  key={taskData.id} taskData={taskData} checkDone={checkDone} {...props}/>
                                   ))} 
               </Container>
           </>

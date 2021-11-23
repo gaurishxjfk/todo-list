@@ -9,6 +9,7 @@ BigCalendar.momentLocalizer(moment);
 const DragAndDropCalendar = withDragAndDrop(BigCalendar);
 
 const Calender = (props) => {
+    
     const {eventlist,updateDate} = props;
    
     const [events, setEvents] = useState([...eventlist]);

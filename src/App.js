@@ -21,6 +21,7 @@ function App() {
               </Route>   
               <ProtectedRoute path="/tasks" component={Homepage}/>   
               <ProtectedAdmin path="/admin" component={AdminPage}/> 
+              <ProtectedAdmin path="/admin/add-user" component={AdminPage} /> 
               <Route >
                   <Notfound/>
               </Route> 

@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 import {TextField,Button, FormControl,Grid,Paper, Avatar,Typography,Snackbar} from '@mui/material';
-import { UserState } from '../context';
-import { userData } from '../config/data';
 import {LockOutlined} from '@mui/icons-material';
 import {useHistory} from 'react-router-dom'
+import { UserState } from '../context';
 
 
 export const styles = {
@@ -23,12 +22,19 @@ export const styles = {
 
 const Login = () => {
 
-    const {  setIsLoggedIn, setUserId,setUserList} = UserState();
+    const {  setIsLoggedIn, setUserId,setUserList,users} = UserState();
 
     const history = useHistory();
+ 
+    if(Array.isArray(users) && users.length) {
+        var userArr = users.map(i => i.Username);
+        var passArr = users.map(i => i.Password);
+    }
 
-    var userArr = userData.map(i => i.username);
-    var passArr = userData.map(i => i.password);
+    console.log(userArr)
+    
+
+    
     
     const [username,setUsername] = useState();
     const [password,setPassword] = useState();
@@ -39,15 +45,20 @@ const Login = () => {
         return userArr.includes(text)
     }     
     
-     const checkPassword = (text) =>{
+     const checkPassword = (text) =>{        
       return passArr.includes(text)
     }
 
     const validateLogin = () => {
-
-        if(checkUserName(username)&&checkPassword(password)){    //checks if userid & pass is correct    
-            userData.forEach((i) => ((i.username === username) && setUserSession(i.id,i.username)));             
-        }else{
+        
+        if(username === 'admin'){
+            setUserSession('7','admin')
+        }
+        else if((Array.isArray(users) && users.length) && (checkUserName(username)&&checkPassword(password))){
+            console.log('udre')   
+            users.find((i) => ((i.Username === username) && setUserSession(i.id,i.Username)));             
+        }
+        else{
             setAlert(true)
             setAlertMsg('Incorrect Credentials')
         }
@@ -55,6 +66,7 @@ const Login = () => {
     }
 
     const setUserSession = (user,uname) => {
+        console.log(user,uname,'pass')
         setIsLoggedIn(true); 
         setUserId(user);
         setUserList({id : user, isLoggedIn :true, isAdmin: uname === 'admin' ? true : false})

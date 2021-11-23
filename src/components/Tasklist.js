@@ -4,7 +4,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { styles } from '../Pages/Homepage';
 import { UserState } from '../context';
-
 import TableComp from './TableComp';
 
 

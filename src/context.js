@@ -8,8 +8,13 @@ const Context = ({children}) => {
         return JSON.parse(localStorage.getItem('users'));    
     }
 
+    const getUserList = () => {
+        return JSON.parse(localStorage.getItem('userList'));  
+    }
+
     
     const [userList,setUserList] = useState(getUser());
+    const [users,setUsers] = useState(getUserList());
     const [isLoggedIn, setIsLoggedIn] = useState(userList !== null ? userList.isLoggedIn : false);
     const [userID, setUserId] = useState(userList !== null ? userList.id : '');
     const [isAdmin,setIsAdmin] = useState(userList !== null ? userList.isAdmin : '');
@@ -29,7 +34,8 @@ const Context = ({children}) => {
                                         userID, setUserId,
                                         userList,setUserList,
                                         isAdmin,setIsAdmin,
-                                        isDoneFilter, setIsDoneFilter}}>
+                                        isDoneFilter, setIsDoneFilter,
+                                        users,setUsers}}>
             {children}
         </userContext.Provider>
     )

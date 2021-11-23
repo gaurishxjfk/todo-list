@@ -1,8 +1,7 @@
-import {  Container,  TextField } from '@mui/material';
-
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/pickers";
+import {  Container,  TextField } from '@mui/material';
 import DateFnsUtils from "@date-io/date-fns";
 import Button from '@mui/material/Button';
 
@@ -99,7 +98,7 @@ const AddTaskForm = (props) => {
                     </MuiPickersUtilsProvider>
                 </div>   
                 <div>       
-                    <Button type="submit" disabled={String(startDate) === 'Invalid Date' ? true : false} className='add-btn'>
+                    <Button type="submit" disabled={String(startDate) === 'Invalid Date' ? true : false} className='btn_submitForm'>
                         {isEditing ? 'Update' : 'Add'}
                     </Button>    
                 </div>   

@@ -1,26 +1,31 @@
+import React, { useEffect, useState } from 'react'
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { Alert, Button, Container, Grid, Snackbar, TextField } from '@mui/material'
-import React, { useEffect } from 'react'
+import { experimentalStyled as styled } from '@mui/material/styles';
 import { useForm } from "react-hook-form";
 import { todayDate } from '../Pages/Homepage';
-import { experimentalStyled as styled } from '@mui/material/styles';
 
 
-const AddTask = (props) => {    
-
+const AddTask = (props) => {  
   
+  const { isEditing, updateTaskList, setTaskList, task,
+          taskList, dateValue, setTodoForm, setDateValue,
+          userID ,
+  } = props;
 
     const { register, handleSubmit,  formState: { errors,isSubmitSuccessful },reset } = useForm();
 
+    const [open, setOpen] = useState(false);
+
     const onSubmit = (data) => {
-        if(props.isEditing){            
-            props.updateTaskList(data.taskname)
+        if(isEditing){            
+            updateTaskList(data.taskname)
         }else{
-            props.setTaskList([...props.taskList,addTask(data.taskname,props.dateValue)])
+            setTaskList([...taskList,addTask(data.taskname,dateValue)])
         }
-        props.setTodoForm(false)
+        setTodoForm(false)
         handleClick();
     };
 
@@ -34,53 +39,39 @@ const AddTask = (props) => {
         padding: theme.spacing(2),
         textAlign: 'center',
         color: theme.palette.text.secondary,
-      }));
-
-     
+      }));     
 
     useEffect(() => {
         if (isSubmitSuccessful) {
-          reset({ taskname: '' });
-          props.setDateValue(todayDate) 
-        }else if(props.isEditing){
-
-            reset({ taskname: props.task });
-            
-        }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isSubmitSuccessful , reset , props.setDateValue,props.isEditing]);
-
-    
-
+            reset({ taskname: '' });
+            setDateValue(todayDate) 
+        }else if(isEditing){
+            reset({ taskname: task });            
+        }     
+    }, [isSubmitSuccessful, reset, setDateValue, isEditing, task]);  
 
     useEffect(() => {
-        localStorage.setItem(`task-${props.userID}`,JSON.stringify(props.taskList));     
-    }, [props.task, props.taskList, props.userID]); 
+        localStorage.setItem(`task-${userID}`,JSON.stringify(taskList));     
+    }, [task, taskList, userID]);    
 
-    const [open, setOpen] = React.useState(false);
+    const handleClick = () => {
+      setOpen(true);
+    };
 
-  const handleClick = () => {
-    setOpen(true);
+    const handleClose = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+      setOpen(false);
   };
 
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setOpen(false);
-  };
-
-    return (
+  return (
     <Container >
-            {/* <Grid container direction='row' justifyContent='flex-start' alignItems='flex-end' mt={4}>   
-               
-             </Grid> */}
 
         <Grid container direction='row' justifyContent='flex-end' mt={4}>            
-                <Button variant="outlined" color="success" onClick={(e) => (props.setTodoForm(true))}>Add New</Button>
-            
+                <Button variant="outlined" color="success" onClick={(e) => (props.setTodoForm(true))}>Add New</Button>            
         </Grid>
+
         <Grid container style={{display : props.todoForm ? 'block' : 'none'}} direction='row' width={'100%'}>    
                
             <form onSubmit={handleSubmit(onSubmit)} style={{width:'100%'}}>
@@ -114,7 +105,6 @@ const AddTask = (props) => {
                             </LocalizationProvider>
 
                             <Button variant="outlined" 
-                                //onClick={isEditing?updateTaskList:addTasks} 
                                 style={{height:'3.55rem'}} type="submit">
                                 {props.isEditing?'Update':'Add'}
                                 
