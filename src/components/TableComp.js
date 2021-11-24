@@ -7,10 +7,12 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { UserState } from '../context';
 import { Button, Checkbox, Dialog, DialogActions, DialogTitle, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import ReactHTMLTableToExcel from 'react-html-table-to-excel';
+import { UserState } from '../context';
+import arrayCheck from '../Pages/Homepage'
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -39,11 +41,21 @@ const TableComp = (props) => {
     const {isAdmin,isDoneFilter,setIsDoneFilter} = UserState();
 
     return (<>
-    
-        <TableContainer component={Paper}>
+
+                <ReactHTMLTableToExcel
+                    id="test-table-xls-button"
+                    className="download-table-xls-button"
+                    table="table-to-xls"
+                    filename="TaskList"
+                    sheet="tablexls"
+                    buttonText={<EditIcon/>}/>
+                
+
+            
+         <TableContainer component={Paper}>
         Show Done Tasks
              <Checkbox defaultChecked={isDoneFilter} onChange={e => setIsDoneFilter(!isDoneFilter)} /> 
-          <Table sx={{ minWidth: 380 }} aria-label="customized table">
+          <Table sx={{ minWidth: 380 }} aria-label="customized table" id="table-to-xls">
 
             <TableHead>
               <TableRow>
@@ -56,15 +68,15 @@ const TableComp = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-            {props.rows.length === 0 ? '' :
+            {arrayCheck(props.rows) &&
               props.rows.map((row) => (
-                <StyledTableRow key={row.name}>
+                <StyledTableRow key={row.id}>
                   <StyledTableCell component="th" scope="row">
     
                       <Checkbox defaultChecked={row.isDone} onChange={e => props.checkDone(row.id)} disabled={isAdmin && true}/>
                        
                   </StyledTableCell>
-                  <StyledTableCell align="right">{row.name}</StyledTableCell>
+                  <StyledTableCell align="right">{row.Task}</StyledTableCell>
                   <StyledTableCell align="right">{new Date(row.date).toLocaleDateString()}</StyledTableCell>
                   {props.isEditing?'' : 
                   <StyledTableCell align="right">
@@ -99,7 +111,9 @@ const TableComp = (props) => {
                                                   props.setOpenModal(false)}} autoFocus>Yes</Button>
                               </DialogActions>
                           </Dialog>
-        </TableContainer></>
+        </TableContainer> 
+        
+        </>
       );
 }
 

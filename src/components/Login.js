@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
+import {useHistory} from 'react-router-dom'
 import {TextField,Button, FormControl,Grid,Paper, Avatar,Typography,Snackbar} from '@mui/material';
+import {LockOutlined} from '@mui/icons-material';
 import { UserState } from '../context';
 import { userData } from '../config/data';
-import {LockOutlined} from '@mui/icons-material';
-import {useHistory} from 'react-router-dom'
+import arrayCheck from '../Pages/Homepage'
 
 
 export const styles = {
@@ -27,8 +28,8 @@ const Login = () => {
 
     const history = useHistory();
 
-    var userArr = userData.map(i => i.username);
-    var passArr = userData.map(i => i.password);
+    var userArr = arrayCheck(userData) && userData.map(i => i.username);
+    var passArr = arrayCheck(userData) && userData.map(i => i.password);
     
     const [username,setUsername] = useState();
     const [password,setPassword] = useState();
@@ -45,8 +46,9 @@ const Login = () => {
 
     const validateLogin = () => {
 
-        if(checkUserName(username)&&checkPassword(password)){    //checks if userid & pass is correct    
-            userData.forEach((i) => ((i.username === username) && setUserSession(i.id,i.username)));             
+        if(checkUserName(username)&&checkPassword(password)){    
+            //arrayCheck(userData) && 
+                userData.find((i) => ((i.username === username) && setUserSession(i.id,i.username)));             
         }else{
             setAlert(true)
             setAlertMsg('Incorrect Credentials')

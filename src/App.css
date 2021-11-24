@@ -1,0 +1,7 @@
+.button__submitTask{
+    background-color: #1976d2 !important;
+    color: #ffffff !important;
+    height: 2.8rem;
+    width: 100% !important;
+    border-radius: 8px !important;
+}
