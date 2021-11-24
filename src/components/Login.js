@@ -47,7 +47,7 @@ const Login = () => {
     const validateLogin = () => {
 
         if(checkUserName(username)&&checkPassword(password)){    
-            arrayCheck(userData) && 
+            //arrayCheck(userData) && 
                 userData.find((i) => ((i.username === username) && setUserSession(i.id,i.username)));             
         }else{
             setAlert(true)

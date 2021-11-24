@@ -40,17 +40,10 @@ const TabMenuListBar = (props) => {
     setValue(newValue);
   };
 
-
-  const filteredResults = props.isDoneFilter ? 
-                          arrayCheck(props.taskList) && 
-                            props.taskList.filter(i => (
-                                  (i.Task.includes(props.searchTask)) || (i.date.includes(props.searchTask))) 
-                                  && 
-                                  i.isDone === props.isDoneFilter)
-                          : 
-                          arrayCheck(props.taskList) && 
-                            props.taskList.filter(i => (
-                                  i.Task.includes(props.searchTask)) || (i.date.includes(props.searchTask)));
+  const filteredResults = props.isDoneFilter ?   arrayCheck(props.taskList) && props.taskList.filter(i => ((i.Task.includes(props.searchTask))
+                                                                    ) && (
+                                                                    i.isDone === props.isDoneFilter))
+                                        :   arrayCheck(props.taskList) && props.taskList.filter(i => (i.Task.includes(props.searchTask)));
 
 
     return (

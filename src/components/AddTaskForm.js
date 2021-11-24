@@ -4,7 +4,6 @@ import {  Container,  TextField } from '@mui/material';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import Button from '@mui/material/Button';
-import arrayCheck from '../Pages/Homepage'
 import {patterns} from './Regex'
 
 let taskRegex = patterns.taskName;
@@ -21,7 +20,7 @@ let taskRegex = patterns.taskName;
 
 const AddTaskForm = (props) => {
     
-    const { isEditing , taskList , taskId , setTaskList , setIsEditing , setOpenModal } = props;
+    const { isEditing , taskList , taskId , setTaskList , setIsEditing , setOpenTaskModal } = props;
 
     const { register, handleSubmit, formState: { errors },reset } = useForm();
 
@@ -29,7 +28,7 @@ const AddTaskForm = (props) => {
 
     const onSubmit = (data) => {
         if(isEditing){
-          let result =  arrayCheck(taskList) && taskList.map((task) => (
+          let result =   taskList.map((task) => (
                 task.id === taskId ? { ...data , 
                                     date : startDate, 
                                     id : taskId, 
@@ -39,7 +38,7 @@ const AddTaskForm = (props) => {
             ))
             setTaskList(result)
             setIsEditing(false)  
-            setOpenModal(false);           
+            setOpenTaskModal(false);           
         }else{
             setTaskList([ ...taskList, { ...data , 
                                     date : startDate, 
@@ -47,21 +46,21 @@ const AddTaskForm = (props) => {
                                     isDone :false, 
                                     isEditing : false }]);
                                     
-            setOpenModal(false);           
+            setOpenTaskModal(false);           
         }
     };
-
+  
     useEffect(() => {        
         if(isEditing){
-            const result = arrayCheck(taskList) && taskList.filter(i => i.id === taskId)  
+            const result = taskList.filter(i => i.id === taskId)  
             reset({ Task : result[0].Task,  Description : result[0].Description  })
             setStartDate(result[0].date)
         }
     }, [taskList,isEditing,taskId,reset])  
-    
+   
     
     const [startDate, setStartDate] = useState(new Date());
-console.log(taskRegex)
+
     return (
         
             <form onSubmit={handleSubmit(onSubmit)}>

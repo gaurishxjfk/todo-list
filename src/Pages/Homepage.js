@@ -67,7 +67,7 @@ const Homepage = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [taskId, setTaskId] = useState('');
     const [searchTask, setSearchTask] = useState('');
-    const [openModal, setOpenModal] = useState(false);
+    const [openTaskModal, setOpenTaskModal] = useState(false);
     const [todoForm, setTodoForm] = useState(false)
     const [adminPanel, setAdminPanel] = useState('')
     const [openSideBar,setOpenSideBar] = useState(false);
@@ -77,14 +77,15 @@ const Homepage = () => {
     var userName ;
     var userAvatar ;
 
+    const handleOpenModal = () => setOpenTaskModal(true);
+    
     const setEditingMode = (id) => {
         setTodoForm(true)
         setIsEditing(true)
-        setOpenModal(true)
+        handleOpenModal()
         setTaskId(id)
-        alert('adad')
     }
-console.log((arrayCheck(taskList)) ? 'true':'false')
+
     userData.find((i) => {
         if(i.id === userID){
             userName = i.first_name;
@@ -98,8 +99,7 @@ console.log((arrayCheck(taskList)) ? 'true':'false')
     }  
 
     const updateTaskList = (updated) => {  
-        console.log('here')
-            const result = arrayCheck(taskList) && taskList.map((i) => (i.id === taskId ? {...i, name : updated,date : dateValue}  : i  ))
+            const result =  taskList.map((i) => (i.id === taskId ? {...i, name : updated,date : dateValue}  : i  ))
             setTaskList(result)     
             setIsEditing(false)
             setTask('')
@@ -137,15 +137,10 @@ console.log((arrayCheck(taskList)) ? 'true':'false')
         }
     }
 
-    const filteredResults = isDoneFilter ? 
-                        arrayCheck(taskList) && taskList.filter(i => (
-                                                (i.Task.includes(searchTask)) || (i.date.includes(searchTask))
-                                                ) && (
-                                                    i.isDone === isDoneFilter))
-                            :
-                          arrayCheck(taskList) && taskList.filter(i => (
-                                    i.Task.includes(searchTask)) || (i.date.includes(searchTask))
-                                    );
+    const filteredResults = isDoneFilter ?   arrayCheck(taskList) && taskList.filter(i => ((i.Task.includes(searchTask))
+                                                                    ) && (
+                                                                    i.isDone === isDoneFilter))
+                                        :   arrayCheck(taskList) && taskList.filter(i => (i.Task.includes(searchTask)));
 
     const eventlist = arrayCheck(filteredResults) && filteredResults.map((task) => (
         eventObj(task.id,task.Task,task.date,task.Description)
@@ -176,8 +171,9 @@ console.log((arrayCheck(taskList)) ? 'true':'false')
                   adminPanel={adminPanel} setAdminPanel={setAdminPanel}
                   setUserPath={setUserPath}/>
 
-                  <TabMenuListBar openModal={openModal} 
-                                    setOpenModal={setOpenModal} 
+                  <TabMenuListBar openTaskModal={openTaskModal} 
+                                    setOpenTaskModal={setOpenTaskModal} 
+                                    handleOpenModal={handleOpenModal}
                                     taskList={taskList} 
                                     setTaskList={setTaskList}
                                     isEditing={isEditing}

@@ -22,29 +22,29 @@ const style = {
 
 const   AddTaskModal = (props) => {
     
-    const handleOpenModal = () => props.setOpenModal(true);
+    //const handleOpenModal = () => props.setOpenModal(true);
     
     const handleCloseModal = () => {
-        props.setOpenModal(false);
+        props.setOpenTaskModal(false);
         props.setIsEditing(false);
     };
     
     return (
         <Container >
         <IconButton variant="contained" 
-                onClick={handleOpenModal}                 
+                onClick={props.handleOpenModal}                 
                 sx={{backgroundColor : '#1976d2'}}>
                     <AddTaskIcon  />
                     </IconButton>
     
-            <Modal open={props.openModal}
+            <Modal open={props.openTaskModal}
                     onClose={handleCloseModal}
                     aria-labelledby="transition-modal-title"
                     aria-describedby="transition-modal-description"
                     BackdropProps={{
                         timeout: 500,
                       }}>
-                        <Fade in={props.openModal}>
+                        <Fade in={props.openTaskModal}>
                 <Box sx={style}>
                     <AddTaskForm {...props} />
                 </Box>
