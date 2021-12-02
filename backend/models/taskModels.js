@@ -23,6 +23,10 @@ const taskSchema = new mongoose.Schema({
         type:Boolean,
         default:false
     },
+    userID : {
+        type:String,
+        required: [true, 'user id is required'],
+    },
 })
 
 module.exports = mongoose.model('Task',taskSchema);

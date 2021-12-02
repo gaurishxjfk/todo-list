@@ -9,7 +9,7 @@ require('dotenv').config()
 app.use(express.json());
 app.use(cors());
 // routes
-app.use('/api/v1/tasks', backendRoutes)
+app.use('/api/v1', backendRoutes)
 
 
 const PORT = process.env.PORT || 4000;

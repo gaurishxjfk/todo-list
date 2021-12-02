@@ -1,8 +1,12 @@
+const jwt = require('jsonwebtoken')
 const Task = require('../models/taskModels')
+const User = require('../models/userModels')
+const CustomAPIError = require('../errors/custom-error');
 
 const getAllTasks = async (req,res) => {
+    const { id: userID} = req.params;
     try {
-        const tasks = await Task.find({})
+        const tasks = await Task.find({ userID: userID})
         res.status(200).json({tasks})
     } catch (error) {
         res.status(500).json({msg :'No tasks added'})
@@ -10,7 +14,6 @@ const getAllTasks = async (req,res) => {
 }
 
 const addTask = async (req,res) => {
-    console.log(req.body)
     try {
         const task = await Task.create(req.body)
         res.status(201).json({task})
@@ -63,9 +66,57 @@ const updateTask = async (req,res) => {
     }
 }
 
+const addUser = async (req,res) => {
+    try {
+        const user = await User.create(req.body)
+        res.status(201).json({user})
+    } catch (error) {
+        res.status(500).json({msg :'some error occured'})
+    }
+}
+
+const getAllUsers = async (req,res) => {
+    try {
+        const user = await User.find({})
+        res.status(200).json({user})
+    } catch (error) {
+        res.status(500).json({msg :'No tasks added'})
+    }
+}
+
+const login = async (req,res) => {
+
+    const {username,password} = req.body;
+    if(!username || !password){
+      return CustomAPIError('pleascee',400)
+    }
+    const token = jwt.sign({username},process.env.JWT_SECRET,{expiresIn:'30d'})
+
+    res.status(200).json({msg:'userCreated',token})
+}
+
+const getUser = async (req,res) => {
+    try {
+        const { id: userID} = req.params;
+        
+        const user = await User.findOne({userName:userID})
+
+        if(!user){
+            return res.status(404).json({msg:`No USER with id ${userID}`})
+        }
+        res.status(200).json({user})
+    } catch (error) {
+        res.status(500).json({msg :'some error occured'})
+    }
+}
+
 module.exports = {
     getAllTasks,
     addTask,
     getSingleTask,
     deleteTask,
-    updateTask};
+    updateTask,
+    addUser,
+    getAllUsers,
+    login,
+    getUser };
