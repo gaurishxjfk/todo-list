@@ -1,0 +1,23 @@
+{
+  "name": "todoapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"cd backend && npm start\" \"cd todo-list && npm start\" "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nerdgaurish/todo-list.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nerdgaurish/todo-list/issues"
+  },
+  "homepage": "https://github.com/nerdgaurish/todo-list#readme",
+  "devDependencies": {
+    "concurrently": "^6.4.0",
+    "nodemon": "^2.0.15"
+  }
+}
