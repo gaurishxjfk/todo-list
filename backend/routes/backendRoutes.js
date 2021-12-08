@@ -4,16 +4,22 @@ const {getAllTasks,
     addTask,
     getSingleTask,
     deleteTask,
-    updateTask } = require('../controller/backendControllers')
+    updateTask,
+    addUser,
+    getAllUsers,
+    login,getUser } = require('../controller/backendControllers');
+const {authMiddleWare} = require('../middleware/auth')
 
-router.get('/',getAllTasks);
+router.route('/tasks/:id').get(getAllTasks);
+router.post('/tasks/',addTask);
+router.get('/tasks/task/:id',getSingleTask);
+router.delete('/tasks/:id',deleteTask);
+router.patch('/tasks/:id',updateTask);
 
-router.post('/',addTask);
+router.post('/user',addUser);
+router.get('/user/',getAllUsers);
+router.get('/user/:id',getUser);
 
-router.get('/:id',getSingleTask);
-
-router.delete('/:id',deleteTask);
-
-router.patch('/:id',updateTask);
+router.route('/login').post(login);
 
 module.exports = router;
