@@ -4,7 +4,7 @@ const User = require('../models/userModels')
 const CustomAPIError = require('../errors/custom-error');
 
 const getAllTasks = async (req,res) => {
-    const { id: userID} = req.params;
+    const { id: userID} = req.params;    
     try {
         const tasks = await Task.find({ userID: userID})
         res.status(200).json({tasks})
@@ -85,8 +85,8 @@ const getAllUsers = async (req,res) => {
 }
 
 const login = async (req,res) => {
-
     const {username,password} = req.body;
+    
     if(!username || !password){
       return CustomAPIError('pleascee',400)
     }
