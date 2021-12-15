@@ -4,7 +4,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/function-component-definition */
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -257,13 +256,7 @@ const Header = ({
   );
 };
 
-Header.prototype = {
-  setSearchTask: PropTypes.func,
-  userAvatar: PropTypes.string,
-  setOpenSideBar: PropTypes.func,
-  openSideBar: PropTypes.bool,
-  searchTask: PropTypes.string,
-};
+
 
 // export default Header;
 export const MemoizedHeader = React.memo(Header);

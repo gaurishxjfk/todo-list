@@ -162,5 +162,5 @@ const Sidebar = (props) => {
   return <></>;
 };
 
-// export default Sidebar;
-export const MemoizedSidebar = React.memo(Sidebar);
+export default Sidebar;
+// export const MemoizedSidebar = React.memo(Sidebar);

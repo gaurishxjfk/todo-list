@@ -25,6 +25,10 @@ const userSchema = new mongoose.Schema({
         trim:true,
         maxLength:[50,'password cannot be more than 50']
     },
+    role : {
+        type:String,
+        required: [true, 'is required']
+    },
 })
 
 module.exports = mongoose.model('User',userSchema);

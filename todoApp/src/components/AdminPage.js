@@ -43,6 +43,7 @@ const AdminPage = () => {
   }, [location]);
 
   const addUserOpenModal = () => {
+    console.log("pok")
     setAddUserModal(true);
     history.push("/admin/add-user");
   };

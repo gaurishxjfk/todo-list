@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 /* eslint-disable no-return-assign */
 /* eslint-disable no-param-reassign */
 import { createSlice } from "@reduxjs/toolkit";

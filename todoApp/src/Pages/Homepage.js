@@ -3,15 +3,13 @@
 /* eslint-disable no-underscore-dangle */
 import React, { useEffect, useState } from "react";
 import { Button, Dialog, DialogActions, DialogTitle } from "@mui/material";
-import PropTypes from "prop-types";
 import axios from "axios";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useDispatch, useSelector } from "react-redux";
 import Primeui from "./Primeui";
 import TabMenuListBar from "../components/TabMenuListBar";
-import { UserState } from "../context";
 import { MemoizedHeader } from "../components/Header";
-import { MemoizedSidebar } from "../components/Sidebar";
+import Sidebar from "../components/Sidebar";
 import {
   arrayCheck,
   getFormattedDate,
@@ -45,15 +43,6 @@ const columns = [
 
 // eslint-disable-next-line func-names
 const Homepage = function (props) {
-  const { addUserOpenModal } = props;
-
-  Homepage.propTypes = {
-    addUserOpenModal: PropTypes.func,
-  };
-
-  Homepage.defaultProps = {
-    addUserOpenModal: PropTypes.func,
-  };
 
   const token = localStorage.getItem("token");
   const { username } = token ? parseJwt(token) : "";
@@ -114,7 +103,6 @@ const Homepage = function (props) {
     });
     role === "admin" ? setIsAdmin(true) : setIsAdmin(false);
     dispatch(setUserID({ uID, role, isAdmin }));
-    console.log(isAdmin);
     fetchTasksData(uID);
   };
 
@@ -195,13 +183,13 @@ const Homepage = function (props) {
         openSideBar={openSideBar}
       />
 
-      <MemoizedSidebar
+      <Sidebar
         openSideBar={openSideBar}
         setOpenSideBar={setOpenSideBar}
         isDoneFilter={isDone}
         adminPanel={adminPanel}
         setAdminPanel={setAdminPanel}
-        addUserOpenModal={addUserOpenModal}
+        {...props}
       />
 
       {!isAdmin && (

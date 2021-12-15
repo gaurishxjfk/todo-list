@@ -78,7 +78,6 @@ const ToDo = (props) => {
           </Grid>
 
           <Grid sx={styles.cardIconSection}>
-            {/* eslint-disable-next-line prettier/prettier */}
             <Checkbox {...label}
               icon={<BookmarkBorderIcon />}
               checkedIcon={<BookmarkIcon />}
